@@ -11,8 +11,8 @@ Public Class FrmTrans2D
 
     'This program shows the complete implementation
     'of a 2D finite element program to analyse coupled 
-    'hygro-thermo-chemical chloride transport in concretes .
-    'Copyright © 2020 by Xuande Chen, Thomas Sanchez and David Conciatori
+    'hygro-thermo-chemical multi-ionic transport in concretes .
+    'Copyright©2020 by Xuande Chen, Thomas Sanchez and David Conciatori
     'Concrete Durability Group
     'Laval Univeristy
     'Quebec, QC
@@ -38,8 +38,13 @@ Public Class FrmTrans2D
     Public colorMap As ColorMap
     Public HRRange As Range
     Public SlRange As Range
-    Public TRange As Range 'xuande, value range for temperature
-    Public ClRange As Range 'xuande, value range for chlore
+    Public TRange As Range
+    Public NaRange As Range 'Xuande 2021.09.05
+    Public ClRange As Range
+    Public KRange As Range
+    Public OHRange As Range
+    Public CaRange As Range
+    Public SO4Range As Range
     Public Directory As String
     'Private EpsilonXRange, EpsilonYRange, GammaXYRange As Range
 
@@ -48,9 +53,12 @@ Public Class FrmTrans2D
         HR
         Sl
         T
-        EpsilonX
-        EpsilonY
-        GammaXY
+        Na
+        Cl
+        K
+        OH
+        Ca
+        SO4
     End Enum
 
     Private ShowResult As Results = Results.None
@@ -125,7 +133,7 @@ Public Class FrmTrans2D
         End If
 
         'Dim C2D As New Compute2D
-        Dim C2D As New Compute2D_trial 'xuande, activate hygro-thermo coupling
+        Dim C2D As New Compute2D_trial 'Xuande, activate hygro-thermo coupling multi-ionic model
         'perform analysis using the finite elemeent method
         Dim ind As Integer = C2D.Read_InputFile()
         For i As Integer = 1 To Expo.Length - 1
@@ -576,6 +584,48 @@ Public Class FrmTrans2D
                         TimeScrollBar.Visible = True
                         LabelT1.Visible = True
                         LabelTVal.Visible = True
+                    Case Results.Na 'Xuande 2021.09.03
+                        colorMap = New ColorMap(Math.Round(NaRange.Max, 2), Math.Round(NaRange.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
+                    Case Results.Cl
+                        colorMap = New ColorMap(Math.Round(ClRange.Max, 2), Math.Round(ClRange.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
+                    Case Results.K
+                        colorMap = New ColorMap(Math.Round(KRange.Max, 2), Math.Round(KRange.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
+                    Case Results.OH
+                        colorMap = New ColorMap(Math.Round(OHRange.Max, 2), Math.Round(OHRange.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
+                    Case Results.Ca
+                        colorMap = New ColorMap(Math.Round(CaRange.Max, 2), Math.Round(CaRange.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
+                    Case Results.SO4
+                        colorMap = New ColorMap(Math.Round(SO4Range.Max, 2), Math.Round(SO4Range.Min, 2))
+                        'TimeScrollBar
+                        TimeScrollBar.Maximum = Time.Length()
+                        TimeScrollBar.Visible = True
+                        LabelT1.Visible = True
+                        LabelTVal.Visible = True
                         'Case Results.EpsilonX
                         'colorMap = New ColorMap(EpsilonXRange.Max, EpsilonXRange.Min)
                         'Case Results.EpsilonY
@@ -604,6 +654,24 @@ Public Class FrmTrans2D
                             LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
                         Case Results.T
                             eColor = colorMap.getColor(Elements(i).GetT(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.Na
+                            eColor = colorMap.getColor(Elements(i).GetNa(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.Cl
+                            eColor = colorMap.getColor(Elements(i).GetCl(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.K
+                            eColor = colorMap.getColor(Elements(i).GetK(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.OH
+                            eColor = colorMap.getColor(Elements(i).GetOH(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.Ca
+                            eColor = colorMap.getColor(Elements(i).GetCa(TimeScrollBar.Value))
+                            LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
+                        Case Results.SO4
+                            eColor = colorMap.getColor(Elements(i).GetSO4(TimeScrollBar.Value))
                             LabelTVal.Text = CStr(Time(TimeScrollBar.Value))
                             'eColor = colorMap.getColor(Elements(i).Stresses(1))
                             'eColor = colorMap.getColor(Elements(i).HR(1))
@@ -645,7 +713,7 @@ Public Class FrmTrans2D
                 'Draw Colormap at right top of the picturebox
                 'only if required
                 If ShowResult <> Results.None Then
-                    Dim cmap As New ColorMap(250, 0)
+                    Dim cmap As New ColorMap(256, 0)
                     Dim c As Color
                     Dim x1, x2, y As Integer
                     y = 50
@@ -797,8 +865,7 @@ Public Class FrmTrans2D
     End Sub
 
     Private Sub HandleShowResultClick(sender As Object, e As EventArgs) Handles XToolStripMenuItem.Click,
-            HRToolStripMenuItem.Click, SlToolStripMenuItem.Click, TToolStripMenuItem.Click,
-            EpsilonXToolStripMenuItem.Click, EpsilonYToolStripMenuItem.Click, GammaXYToolStripMenuItem.Click
+            HRToolStripMenuItem.Click, SlToolStripMenuItem.Click, TToolStripMenuItem.Click, NaToolStripMenuItem.Click, ClToolStripMenuItem.Click, KToolStripMenuItem.Click, OHToolStripMenuItem.Click, CaToolStripMenuItem.Click, SO4ToolStripMenuItem.Click
 
         ShowResult = Results.None
 
@@ -810,12 +877,18 @@ Public Class FrmTrans2D
             ShowResult = Results.Sl
         ElseIf sender.Equals(TToolStripMenuItem) Then
             ShowResult = Results.T
-        ElseIf sender.Equals(EpsilonXToolStripMenuItem) Then
-            ShowResult = Results.EpsilonX
-        ElseIf sender.Equals(EpsilonYToolStripMenuItem) Then
-            ShowResult = Results.EpsilonY
-        ElseIf sender.Equals(GammaXYToolStripMenuItem) Then
-            ShowResult = Results.GammaXY
+        ElseIf sender.Equals(NaToolStripMenuItem) Then
+            ShowResult = Results.Na
+        ElseIf sender.Equals(ClToolStripMenuItem) Then
+            ShowResult = Results.Cl
+        ElseIf sender.Equals(KToolStripMenuItem) Then
+            ShowResult = Results.K
+        ElseIf sender.Equals(OHToolStripMenuItem) Then
+            ShowResult = Results.OH
+        ElseIf sender.Equals(CaToolStripMenuItem) Then
+            ShowResult = Results.Ca
+        ElseIf sender.Equals(SO4ToolStripMenuItem) Then
+            ShowResult = Results.SO4
         End If
         DrawModel()
 
@@ -834,7 +907,12 @@ Public Class FrmTrans2D
         HRRange = New Range
         SlRange = New Range
         TRange = New Range
+        NaRange = New Range
         ClRange = New Range
+        KRange = New Range
+        OHRange = New Range
+        CaRange = New Range
+        SO4Range = New Range
         ReDim Time(ind + 1)
         Time(0) = 0
         LabelProgress.Visible = True
@@ -849,7 +927,12 @@ Public Class FrmTrans2D
                 HRRange.AddValue(Elements(i).GetHR(Time))
                 SlRange.AddValue(Elements(i).GetS(Time))
                 TRange.AddValue(Elements(i).GetT(Time))
+                NaRange.AddValue(Elements(i).GetNa(Time))
                 ClRange.AddValue(Elements(i).GetCl(Time))
+                KRange.AddValue(Elements(i).GetK(Time))
+                OHRange.AddValue(Elements(i).GetOH(Time))
+                CaRange.AddValue(Elements(i).GetCa(Time))
+                SO4Range.AddValue(Elements(i).GetSO4(Time))
             Next
         Next
 
@@ -859,6 +942,30 @@ Public Class FrmTrans2D
 
         LabelProgress.Text = CStr(ti) + " / " + CStr(ind)
         Refresh()
+
+    End Sub
+
+    Private Sub NaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NaToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub ClToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub KToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles KToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub OHToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OHToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub CaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CaToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub SO4ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SO4ToolStripMenuItem.Click
 
     End Sub
 
@@ -896,9 +1003,12 @@ Public Class FrmTrans2D
         HRToolStripMenuItem.Checked = False
         SlToolStripMenuItem.Checked = False
         TToolStripMenuItem.Checked = False
-        EpsilonXToolStripMenuItem.Checked = False
-        EpsilonYToolStripMenuItem.Checked = False
-        GammaXYToolStripMenuItem.Checked = False
+        NaToolStripMenuItem.Checked = False
+        ClToolStripMenuItem.Checked = False
+        KToolStripMenuItem.Checked = False
+        OHToolStripMenuItem.Checked = False
+        CaToolStripMenuItem.Checked = False
+        SO4ToolStripMenuItem.Checked = False
 
         Select Case ShowResult
             Case Results.None
@@ -909,12 +1019,18 @@ Public Class FrmTrans2D
                 SlToolStripMenuItem.Checked = True
             Case Results.T
                 TToolStripMenuItem.Checked = True
-            Case Results.EpsilonX
-                EpsilonXToolStripMenuItem.Checked = True
-            Case Results.EpsilonY
-                EpsilonYToolStripMenuItem.Checked = True
-            Case Results.GammaXY
-                GammaXYToolStripMenuItem.Checked = True
+            Case Results.Na
+                NaToolStripMenuItem.Checked = True
+            Case Results.Cl
+                ClToolStripMenuItem.Checked = True
+            Case Results.K
+                KToolStripMenuItem.Checked = True
+            Case Results.OH
+                OHToolStripMenuItem.Checked = True
+            Case Results.Ca
+                CaToolStripMenuItem.Checked = True
+            Case Results.SO4
+                SO4ToolStripMenuItem.Checked = True
         End Select
 
     End Sub

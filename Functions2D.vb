@@ -11,27 +11,42 @@ Module Functions2D
         Return ve
     End Function
     'get the LHS matrix for Gauss matrix resolution
-    Public Sub FieldAverage(ByRef Nodes() As NodeTrans, ByRef HRAverage As Double, ByRef SAverage As Double, ByRef WAverage As Double, ByRef TAverage As Double, ByRef ClAverage As Double)
+    Public Sub FieldAverage(ByRef Nodes() As NodeTrans, ByRef HRAverage As Double, ByRef SAverage As Double, ByRef WAverage As Double, ByRef TAverage As Double, ByRef NaAverage As Double, ByRef ClAverage As Double, ByRef KAverage As Double, ByRef OHAverage As Double, ByRef CaAverage As Double, ByRef SO4Average As Double)
 
         HRAverage = 0
         SAverage = 0
         WAverage = 0
         TAverage = 0
+        NaAverage = 0
         ClAverage = 0
+        KAverage = 0
+        OHAverage = 0
+        CaAverage = 0
+        SO4Average = 0
         For i As Integer = 0 To Nodes.Length - 1
 
             HRAverage += Nodes(i).GetHROld()
             SAverage += Nodes(i).GetSOld()
             WAverage += Nodes(i).GetWOld()
             TAverage += Nodes(i).GetTOld()
+            NaAverage += Nodes(i).GetNaOld()
             ClAverage += Nodes(i).GetClOld()
+            KAverage += Nodes(i).GetKOld()
+            OHAverage += Nodes(i).GetOHOld()
+            CaAverage += Nodes(i).GetCaOld()
+            SO4Average += Nodes(i).GetSO4Old()
         Next
-
         HRAverage /= Nodes.Length
         SAverage /= Nodes.Length
         WAverage /= Nodes.Length
         TAverage /= Nodes.Length
+        NaAverage /= Nodes.Length
         ClAverage /= Nodes.Length
+        KAverage /= Nodes.Length
+        OHAverage /= Nodes.Length
+        CaAverage /= Nodes.Length
+        SO4Average /= Nodes.Length
+
     End Sub
     Public Sub getLHS(ByRef LHS As Double(,), ByRef NNodes As Integer, ByRef A(,) As Double, ByRef b(,) As Double, ByRef dt As Double)
         ReDim LHS(NNodes - 1, NNodes - 1)
@@ -52,7 +67,17 @@ Module Functions2D
         Next
         Return NewLHS
     End Function
-
+    ' Xuande 2021.08.15 Multiionic model*
+    Public Function getLHS_MI(ByRef LHS_MI As Double(,), ByRef NNodes As Integer, ByRef A(,) As Double, ByRef b(,) As Double, ByRef dt As Double) As Double(,)
+        ReDim LHS_MI(NNodes - 1, NNodes - 1)
+        Dim i, j As Integer
+        For i = 0 To NNodes - 1
+            For j = 0 To NNodes - 1
+                LHS_MI(i, j) = A(i, j) / 2 + b(i, j) / dt
+            Next
+        Next
+        Return LHS_MI
+    End Function
     'Get the RHS matrix For Gauss matrix resolution
     Public Sub getRHS(ByRef RHS As Double(,), ByRef NNodes As Integer, ByRef A(,) As Double, ByRef b(,) As Double, ByRef dt As Double)
         ReDim RHS(NNodes - 1, NNodes - 1)
@@ -73,7 +98,80 @@ Module Functions2D
         Next
         Return NewR
     End Function
+    ' Xuande 2021.08.15 Multiionic model*
+    Public Function getR_MI(ByRef R_MI As Double(,), ByRef NNodes As Integer, ByRef A(,) As Double, ByRef b(,) As Double, ByRef dt As Double) As Double(,)
+        ReDim R_MI(NNodes - 1, NNodes - 1)
+        Dim i, j As Integer
+        For i = 0 To NNodes - 1
+            For j = 0 To NNodes - 1
+                R_MI(i, j) = b(i, j) / dt - A(i, j) / 2
+            Next
+        Next
+        Return R_MI
+    End Function
+    'Compute crack line function factor a, Xuande 2021.09.10
+    Public Function Get_Crline_a(ByRef x1 As Double, ByRef x2 As Double, ByRef y1 As Double, ByRef y2 As Double)
+        Dim a As Double
+        a = (y1 - y2) / (x1 - x2)
+        If a = 0 Then
+            a = a + 1.0E-20
+        End If
+        Return a
+    End Function
+    'Compute crack line function factor b, Xuande 2021.09.10
+    Public Function Get_Crline_b(ByRef x1 As Double, ByRef x2 As Double, ByRef y1 As Double, ByRef y2 As Double)
+        Dim b As Double
+        b = y1 - x1 * (y1 - y2) / (x1 - x2)
+        Return b
+    End Function
+    'Compute perpendicular line function factor m, Xuande 2021.09.10
+    Public Function Get_Pline_m(ByRef a As Double)
+        Dim m As Double
+        m = -1 / a
+        Return m
+    End Function
+    'Compute perpendicular line function factor n, Xuande 2021.09.10
+    Public Function Get_Pline_n(ByRef xe As Double, ByRef ye As Double, ByRef m As Double)
+        Dim n As Double
+        n = ye - xe * m
+        Return n
+    End Function
+    'Compute cross point coordinates
+    Public Function Get_xG(ByRef a As Double, ByRef b As Double, ByRef m As Double, ByRef n As Double)
+        Dim xG As Double
+        xG = (n - b) / (a - m)
+        Return xG
+    End Function
+    Public Function Get_yG(ByRef a As Double, ByRef b As Double, ByRef m As Double, ByRef n As Double)
+        Dim yG As Double
+        yG = (a * n - b * m) / (a - m)
+        Return yG
+    End Function
+    'Location detection function Xuande 2021.09.10
+    Public Function Loc_Detect(ByRef xmin As Double, ByRef xmax As Double, ByRef ymin As Double, ByRef ymax As Double, ByRef xG As Double, ByRef yG As Double)
+        Dim Ind_Dcr As Boolean
+        If ((xmin <= xG) And (xG <= xmax)) And ((ymin <= yG) And (yG <= ymax)) Then
+            Ind_Dcr = True
+        Else
+            Ind_Dcr = False
+        End If
+        Return Ind_Dcr
+    End Function
+    'Determine whether the cross point is also on the crack Xuande 2021.09.14
+    Public Function Point_Detect(ByRef xc1 As Double, ByRef yc1 As Double, ByRef xc2 As Double, ByRef yc2 As Double, ByRef xG As Double, ByRef yG As Double)
+        Dim Ind_Dp As Boolean
+        Dim xc_min = Math.Min(xc1, xc2)
+        Dim xc_max = Math.Max(xc1, xc2)
+        Dim yc_min = Math.Min(yc1, yc2)
+        Dim yc_max = Math.Max(yc1, yc2)
 
+        If ((xc_min <= xG) And (xG <= xc_max)) And ((yc_min <= yG) And (yG <= yc_max)) Then
+            Ind_Dp = True
+        Else
+            Ind_Dp = False
+        End If
+        Return Ind_Dp
+    End Function
     'Get degree Of freedom /water diffusion
     Public Function getDOF(NodeNo As Integer) As Integer
         Dim nDofsPerNode As Integer = 1
@@ -213,6 +311,11 @@ Module Functions2D
         Dim Dv As Double
         Dv = D / pv * (rho_v / rho_l) ^ 2 * dpcdS * f * 1000000.0 'convert unit to mm2/s
         Return Dv
+    End Function
+    ' Xuande 2021.09.09
+    Public Function GetD_MI(ByRef D0_i As Double, ByRef tor_i As Double) As Double ' Get the Ionic Diffusion coefficient 
+        Dim D_MI As Double = D0_i * tor_i
+        Return D_MI
     End Function
 
     'resistance factor function considering the tortuosity
@@ -362,7 +465,7 @@ Module Functions2D
     End Function
 
     'get field average
-    Public Sub GetNewAverage(ByRef Nodes() As NodeTrans, ByRef Havg As Double, ByRef wavg As Double, ByRef Savg As Double, ByRef Tavg As Double, ByRef Clavg As Double)
+    Public Sub GetNewAverage(ByRef Nodes() As NodeTrans, ByRef Havg As Double, ByRef wavg As Double, ByRef Savg As Double, ByRef Tavg As Double, ByRef Naavg As Double, ByRef Clavg As Double, ByRef Kavg As Double, ByRef OHavg As Double, ByRef Caavg As Double, ByRef SO4avg As Double)
 
         Dim len = Nodes.Length()
 
@@ -372,19 +475,26 @@ Module Functions2D
             wavg += Nodes(i).GetWNew()
             Savg += Nodes(i).GetSNew()
             Tavg += Nodes(i).GetTNew()
+            Naavg += Nodes(i).GetNaNew() 'Xuande, 2021.09.04
             Clavg += Nodes(i).GetClNew()
-
-
+            Kavg += Nodes(i).GetKNew()
+            OHavg += Nodes(i).GetOHNew()
+            Caavg += Nodes(i).GetCaNew()
+            SO4avg += Nodes(i).GetSO4New()
         Next
 
         Havg /= len
         wavg /= len
         Savg /= len
         Tavg /= len
+        Naavg /= len
         Clavg /= len
-
+        Kavg /= len
+        OHavg /= len
+        Caavg /= len
+        SO4avg /= len
     End Sub
-    Public Sub GetOldAverage(ByRef Nodes() As NodeTrans, ByRef Havg As Double, ByRef wavg As Double, ByRef Savg As Double, ByRef Tavg As Double, ByRef Clavg As Double)
+    Public Sub GetOldAverage(ByRef Nodes() As NodeTrans, ByRef Havg As Double, ByRef wavg As Double, ByRef Savg As Double, ByRef Tavg As Double, ByRef Naavg As Double, ByRef Clavg As Double, ByRef Kavg As Double, ByRef OHavg As Double, ByRef Caavg As Double, ByRef SO4avg As Double)
 
         Dim len As Integer = Nodes.Length()
 
@@ -394,28 +504,42 @@ Module Functions2D
             wavg += Nodes(i).GetWOld()
             Savg += Nodes(i).GetSOld()
             Tavg += Nodes(i).GetTOld()
+            Naavg += Nodes(i).GetNaOld() 'Xuande, 2021.09.04
             Clavg += Nodes(i).GetClOld()
+            Kavg += Nodes(i).GetKOld()
+            OHavg += Nodes(i).GetOHOld()
+            Caavg += Nodes(i).GetCaOld()
+            SO4avg += Nodes(i).GetSO4Old()
         Next
 
         Havg /= len
         wavg /= len
         Savg /= len
         Tavg /= len
+        Naavg /= len
         Clavg /= len
-
+        Kavg /= len
+        OHavg /= len
+        Caavg /= len
+        SO4avg /= len
     End Sub
-    Public Sub UpdatediffAverage(ByRef Nodes() As NodeTrans, ByRef dH_avg As Double, ByRef dw_avg As Double, ByRef dS_avg As Double, ByRef dT_avg As Double, ByRef dCl_avg As Double)
+    Public Sub UpdatediffAverage(ByRef Nodes() As NodeTrans, ByRef dH_avg As Double, ByRef dw_avg As Double, ByRef dS_avg As Double, ByRef dT_avg As Double, ByRef dNa_avg As Double, ByRef dCl_avg As Double, ByRef dK_avg As Double, ByRef dOH_avg As Double, ByRef dCa_avg As Double, ByRef dSO4_avg As Double)
 
-        Dim HRNewAv, HROldAv, WNewAv, WOldAv, SNewAv, SOldAv, TNewAv, TOldAv, ClNewAv, ClOldAv As Double
+        Dim HRNewAv, HROldAv, WNewAv, WOldAv, SNewAv, SOldAv, TNewAv, TOldAv, NaNewAv, NaOldAv, ClNewAv, ClOldAv, KNewAv, KOldAv, OHNewAv, OHOldAv, CaNewAv, CaOldAv, SO4NewAv, SO4OldAv As Double
 
-        GetNewAverage(Nodes, HRNewAv, WNewAv, SNewAv, TNewAv, ClNewAv)
-        GetOldAverage(Nodes, HROldAv, WOldAv, SOldAv, TOldAv, ClOldAv)
+        GetNewAverage(Nodes, HRNewAv, WNewAv, SNewAv, TNewAv, NaNewAv, ClNewAv, KNewAv, OHNewAv, CaNewAv, SO4NewAv)
+        GetOldAverage(Nodes, HROldAv, WOldAv, SOldAv, TOldAv, NaOldAv, ClOldAv, KOldAv, OHOldAv, CaOldAv, SO4OldAv)
 
         dH_avg += HRNewAv - HROldAv
         dw_avg += WNewAv - WOldAv
         dS_avg += SNewAv - SOldAv
         dT_avg += TNewAv - TOldAv
+        dNa_avg += NaNewAv - NaOldAv
         dCl_avg += ClNewAv - ClOldAv
+        dK_avg += KNewAv - KOldAv
+        dOH_avg += OHNewAv - OHOldAv
+        dCa_avg += CaNewAv - CaOldAv
+        dSO4_avg += SO4NewAv - SO4OldAv
     End Sub
     ''thermo transport functions 
     Public Function lambtafunc(ByRef Tc As Double, ByRef phi As Double, ByRef Saturation As Double, ByRef Granulat As Double, ByRef Cement As Double) As Double
@@ -448,7 +572,7 @@ Module Functions2D
         Return Dlambta
     End Function
 
-    ''ionic transport functions
+    'ionic transport functions
     '
 
 End Module

@@ -17,12 +17,24 @@ Public Class Compute2D
     Public mPh As Double = 6.5
     Public RoW As Integer = 1000        'kg/m3
     Public R As Double = 8.3145        'J/mol.K
+    Public F As Double = 96484.6 'Farady constant
+    Public z_Na As Double = 1 'Na + valence number
+    Public z_Cl As Double = 1 'Cl - ...
+    Public z_K As Double = 1 'K + ...
+    Public z_OH As Double = 1 'OH - ...
+    Public z_Ca As Double = 1 'Ca 2+ ...
+    Public z_SO4 As Double = 1 'SO4 2- ...
     'Parameters from input file (Eriture à l'ordre de lecture)
     Dim alpha As Double  'hydration degree(-)
     Dim w As Double 'indicator for isotherm curve
     Dim H_int As Double  'initial relative humidity in the material
     Dim T_int As Double  'initial temperature in the material
+    Dim Na_int As Double  'initial Sodium concentration in the material
     Dim Cl_int As Double  'initial chloride concentration in the material
+    Dim K_int As Double  'initial Potassium concentration in the material
+    Dim OH_int As Double  'initial Hydroxide ion oncentration in the material
+    Dim Ca_int As Double  'initial Calcium concentration in the material
+    Dim SO4_int As Double  'initial Sulfate concentration in the material
     Dim Tc As Double 'initial temperature in the material
     Dim Model As Integer 'Computation model
     Dim tmax As Double 'end time (s) 72h
@@ -53,7 +65,12 @@ Public Class Compute2D
     Dim dw_avg As Double
     Dim dS_avg As Double
     Dim dT_avg As Double
+    Dim dNa_avg As Double
     Dim dCl_avg As Double
+    Dim dK_avg As Double
+    Dim dOH_avg As Double
+    Dim dCa_avg As Double
+    Dim dSO4_avg As Double
     Dim OutputFile As OutputFile2D
 
     Public Function Read_InputFile() As Integer
@@ -128,32 +145,36 @@ Public Class Compute2D
         day = 0 'age du beton (problem)
 
         Dim St As Double = 0.2 'capillary pressure residual saturation
-        Dim w_avg_0, H_avg_0, S_avg_0, T_avg_0, Cl_avg_0 As Double
+        Dim w_avg_0, H_avg_0, S_avg_0, T_avg_0, Na_avg_0, Cl_avg_0, K_avg_0, OH_avg_0, Ca_avg_0, SO4_avg_0 As Double
         Dim HNew As Double
         Dim SNew As Double
         Dim TNew As Double
+        Dim NaNew As Double
         Dim ClNew As Double
+        Dim KNew As Double
+        Dim OHNew As Double
+        Dim CaNew As Double
+        Dim SO4New As Double
         Dim S_int As Double
-        Dim HRAvg, WAvg, SAvg, TAvg, ClAvg As Double
+        Dim HRAvg, WAvg, SAvg, TAvg, NaAvg, ClAvg, KAvg, OHAvg, CaAvg, SO4Avg As Double
         For i As Integer = 0 To NNodes - 1
             S_int = GetHtoS(H_int, type, C, W_C_ratio, Tk, day, rho_l, rho_c, alpha, w)
-            Nodes(i).SetFieldsNew(H_int, S_int, wsat * S_int, T_int, Cl_int)
+            Nodes(i).SetFieldsNew(H_int, S_int, wsat * S_int, T_int, Na_int, Cl_int, K_int, OH_int, Ca_int, SO4_int)
             Nodes(i).SetFieldsNewToOld()
         Next
 
-        FieldAverage(Nodes, H_avg_0, w_avg_0, S_avg_0, T_avg_0, Cl_avg_0)
-        OutputFile.WriteLine(H_avg_0, w_avg_0, S_avg_0, T_avg_0, Cl_avg_0)
+        FieldAverage(Nodes, H_avg_0, w_avg_0, S_avg_0, T_avg_0, Na_avg_0, Cl_avg_0, K_avg_0, OH_avg_0, Ca_avg_0, SO4_avg_0)
+        OutputFile.WriteLine(H_avg_0, w_avg_0, S_avg_0, T_avg_0, Na_avg_0, Cl_avg_0, K_avg_0, OH_avg_0, Ca_avg_0, SO4_avg_0)
 
         'plot initial state
         For i As Integer = 0 To NElements - 1
             Elements(i).ReDimFields(ind + 2)
-            Elements(i).SetFields(0, Nodes(i).GetHRNew() * 100, Nodes(i).GetSNew() * 100, Nodes(i).GetTNew(), Nodes(i).GetClNew())
+            Elements(i).SetFields(0, Nodes(i).GetHRNew() * 100, Nodes(i).GetSNew() * 100, Nodes(i).GetTNew(), Nodes(i).GetNaNew(), Nodes(i).GetClNew(), Nodes(i).GetKNew(), Nodes(i).GetOHNew(), Nodes(i).GetCaNew(), Nodes(i).GetSO4New())
         Next
 
         'apply BC
         For i_node As Integer = 0 To NNodes - 1
-            OutputFile.WriteFirstLine(Nodes(i_node).GetHROld(), Nodes(i_node).GetWOld(), Nodes(i_node).GetSOld(), Nodes(i_node).GetTOld(), Nodes(i_node).GetClOld())
-
+            OutputFile.WriteFirstLine(Nodes(i_node).GetHROld(), Nodes(i_node).GetWOld(), Nodes(i_node).GetSOld(), Nodes(i_node).GetTOld(), Nodes(i_node).GetNaOld(), Nodes(i_node).GetClOld(), Nodes(i_node).GetKOld(), Nodes(i_node).GetOHOld(), Nodes(i_node).GetCaOld(), Nodes(i_node).GetSO4Old())
             If Nodes(i_node).NumExpo <> 0 Then
                 HNew = Expo(Nodes(i_node).NumExpo).Humidite(0) / 100
             Else
@@ -167,14 +188,14 @@ Public Class Compute2D
             End If
             SNew = GetHtoS(HNew, type, C, W_C_ratio, Tk, day, rho_l, rho_c, alpha, w)
 
-            Nodes(i_node).SetFieldsNew(HNew, SNew, wsat * SNew, TNew, ClNew)
+            Nodes(i_node).SetFieldsNew(HNew, SNew, wsat * SNew, TNew, NaNew, ClNew, KNew, OHNew, CaNew, SO4New)
         Next
 
         OutputFile.WriteBlankLine()
 
         'compute variation
-        UpdatediffAverage(Nodes, dH_avg, dw_avg, dS_avg, dT_avg, dCl_avg)
-        GetNewAverage(Nodes, HRAvg, WAvg, SAvg, TAvg, ClAvg)
+        UpdatediffAverage(Nodes, dH_avg, dw_avg, dS_avg, dT_avg, dNa_avg, dCl_avg, dK_avg, dOH_avg, dCa_avg, dSO4_avg)
+        GetNewAverage(Nodes, HRAvg, WAvg, SAvg, TAvg, NaAvg, ClAvg, KAvg, OHAvg, CaAvg, SO4Avg)
 
         'imagine BC is applied in very short time (dt/1000), then output the field variables with BC applied on it
 
@@ -196,7 +217,6 @@ Public Class Compute2D
         Dim cieNew As CIETransNew
         Dim he As HETrans
         Dim H_ele() As Double
-
         OutputFile = New OutputFile2D(directory, 5, NNodes, Model)
         CalculInitialization(Expo, NNodes, Nodes, NElements, Elements, Time)
 
@@ -217,7 +237,7 @@ Public Class Compute2D
                 he = New HETrans(Nodes(Elements(i).Node1 - 1).GetHROld(), Nodes(Elements(i).Node2 - 1).GetHROld(), Nodes(Elements(i).Node3 - 1).GetHROld(), Nodes(Elements(i).Node4 - 1).GetHROld())
                 H_ele = he.getHe
 
-                ' new program using nodal interpolations instead of mean value on elements to calculate diffusion coefficient 2020.08.15 Xuande
+                'new program using nodal interpolations instead of mean value on elements to calculate diffusion coefficient 2020.08.15 Xuande
                 Dim d1 As Double = GetDh(D0, alpha_0, Hc, Tc, H_ele(0))
                 Dim d2 As Double = GetDh(D0, alpha_0, Hc, Tc, H_ele(1))
                 Dim d3 As Double = GetDh(D0, alpha_0, Hc, Tc, H_ele(2))
@@ -272,27 +292,37 @@ Public Class Compute2D
 
                 Dim SNew As Double = GetHtoS(HNew(j), type, C, W_C_ratio, Tk, day, rho_l, rho_c, alpha, w)
                 Dim TNew As Double
+                Dim NaNew As Double
                 Dim ClNew As Double
-                Nodes(j).SetFieldsNew(HNew(j), SNew, wsat * SNew, TNew, ClNew)
+                Dim KNew As Double
+                Dim OHNew As Double
+                Dim CaNew As Double
+                Dim SO4New As Double
+                Nodes(j).SetFieldsNew(HNew(j), SNew, wsat * SNew, TNew, NaNew, ClNew, KNew, OHNew, CaNew, SO4New)
 
             Next
 
             'step 5: Post-process : plot 2D image and export result .txt file 
             ''Post-process : plot 2D image and export result .txt file 
-            Dim HRAvg, WAvg, SAvg, TAvg, ClAvg As Double
+            Dim HRAvg, WAvg, SAvg, TAvg, NaAvg, ClAvg, KAvg, OHAvg, CaAvg, SO4Avg As Double
             For i As Integer = 0 To NElements - 1
                 Elements(i).CalcFieldInElement(ti, Nodes)
             Next
             Time(ti) = ti * dt / 3600 ' Time in hour
             'compute variation
-            UpdatediffAverage(Nodes, dH_avg, dw_avg, dS_avg, dT_avg, dCl_avg)
+            UpdatediffAverage(Nodes, dH_avg, dw_avg, dS_avg, dT_avg, dNa_avg, dCl_avg, dK_avg, dOH_avg, dCa_avg, dSO4_avg)
             If (ti * dt / T_sauv) = Int(ti * dt / T_sauv) And Int(ti * dt / T_sauv) > 0 Then ' check register time
-                GetNewAverage(Nodes, HRAvg, WAvg, SAvg, TAvg, ClAvg)
+                GetNewAverage(Nodes, HRAvg, WAvg, SAvg, TAvg, NaAvg, ClAvg, KAvg, OHAvg, CaAvg, SO4Avg)
                 OutputFile.WriteHR(ti * dt, NNodes, dH_avg, HRAvg, Nodes)
                 OutputFile.WriteW(ti * dt, NNodes, dw_avg, WAvg, Nodes)
                 OutputFile.WriteS(ti * dt, NNodes, dS_avg, SAvg, Nodes)
                 OutputFile.WriteT(ti * dt, NNodes, dT_avg, TAvg, Nodes)
+                OutputFile.WriteNa(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
                 OutputFile.WriteCl(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
+                OutputFile.WriteK(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
+                OutputFile.WriteOH(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
+                OutputFile.WriteCa(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
+                OutputFile.WriteSO4(ti * dt, NNodes, dCl_avg, ClAvg, Nodes)
             End If
         Next
 

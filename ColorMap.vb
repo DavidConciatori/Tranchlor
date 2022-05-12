@@ -17,7 +17,17 @@ Public Class ColorMap
         'we find color between min color and max color corresponding to value and return
         Dim rangeVal As Double = Max - Min
         Dim dv As Double = Value - Min
-        Dim ratio As Double = dv / rangeVal
+        Dim ratio As Double
+        If rangeVal = 0 Then
+            ratio = 0
+        Else
+            ratio = dv / rangeVal
+            If ratio >= 1 Then
+                ratio = 1
+            ElseIf ratio <= 0 Then
+                ratio = 0
+            End If
+        End If
         Dim colIndex As Integer = CInt(ratio * nSegs)
         Return Colors(colIndex)
     End Function

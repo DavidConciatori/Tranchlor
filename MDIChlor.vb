@@ -529,8 +529,6 @@ Public Class MDIChlor : Inherits System.Windows.Forms.Form
         End If
     End Sub
 
-
-
     'Operation pour calcul diffusion 2D  'Xuande 30/06/2020
     'Private Sub Diff2DToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles Diff2D.Click
     '    'check if there is a proper model

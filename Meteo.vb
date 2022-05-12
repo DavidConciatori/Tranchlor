@@ -386,13 +386,13 @@ Module Meteo
             If Dint1 <> 0 Then Dint1 = Dint1 + 1
             If Dint2 <> 0 Then Dint2 = Dint2 + 1
             If Dint1 >= DureeInt Then Dint1 = 0
-            If Dint1 = 0 And arrDaten(i).moy6 / 10 < Tseuil1 And (arrDaten(i).moy13 / 10 >= HRseuil Or arrDaten(i).moy17 / 10 > 0) Then
-                If arrDaten(i).moy17 / 10 = 0 Then
+            If Dint1 = 0 And arrDaten(i).moy6 / 10 < Tseuil1 And (arrDaten(i).moy13 / 10 >= HRseuil Or arrDaten(i).moy17 / 10 > 0) Then 'why or
+                If arrDaten(i).moy17 / 10 = 0 Then 'we don't have rain now
                     arrMatrice(i).salage1 = EpNa1
-                Else
-                    If PluieOld = False Then
+                Else 'we have rain now
+                    If PluieOld = False Then 'we didn't have rain the step before
                         arrMatrice(i).salage1 = QNa1 / (1000 * arrDaten(i).moy17 / 10)
-                    Else
+                    Else ' we had rain the step before
                         If i <> 0 Then arrMatrice(i).salage1 = (arrMatrice(i - 1).salage1 * 1000 * Feau + QNa1) / ((Feau + arrDaten(i).moy17 / 10) * 1000)
                     End If
                 End If
@@ -407,6 +407,7 @@ Module Meteo
                     Else
                         If i <> 0 Then arrMatrice(i).salage2 = (arrMatrice(i - 1).salage2 * 1000 * Feau + QNa2) / ((Feau + arrDaten(i).moy17 / 10) * 1000)
                     End If
+
                 End If
                 Dint2 = Dint2 + 1
             End If
@@ -418,7 +419,7 @@ Module Meteo
             If Dint1 <> 1 Then
                 If PluieOld = True Then
                     If i <> 0 Then arrMatrice(i).salage1 = arrMatrice(i - 1).salage1 * 1000 * Feau / ((Feau + arrDaten(i).moy17 / 10) * 1000)
-                Else
+                Else 'PluieOld = False
                     If i <> 0 Then arrMatrice(i).salage1 = arrMatrice(i - 1).salage1
                 End If
                 If i = 0 Then arrMatrice(i).salage1 = frmTempSeuil.NumericUpDown6.Value / 100
@@ -430,9 +431,9 @@ Module Meteo
                     If i > 0 Then arrMatrice(i).salage2 = arrMatrice(i - 1).salage2
                 End If
                 If i = 0 Then arrMatrice(i).salage2 = frmTempSeuil.NumericUpDown24.Value * frmTempSeuil.NumericUpDown25.Text / 100
-                If arrMatrice(i).salage2 <= 0.1 * EpNa2 Then Dint2 = 0
+                If arrMatrice(i).salage2 <= 0.1 * EpNa2 Then Dint2 = 0 '???
             End If
-            If arrMatrice(i).salage1 > EpNa1 Then arrMatrice(i).salage1 = EpNa1
+            If arrMatrice(i).salage1 > EpNa1 Then arrMatrice(i).salage1 = EpNa1 'keep the maximal value
             If arrMatrice(i).salage2 > EpNa2 Then arrMatrice(i).salage2 = EpNa2
         Next
 

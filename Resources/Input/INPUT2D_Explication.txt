@@ -1,4 +1,4 @@
-' Explication pour le fichier Input 2D
+' Explication for the INPUT2D.txt file
 '--------------- MATERIAL
 CEMI0.44DC	'Material name in the Database
 alpha       'Cement hydration degree estimated
@@ -12,3 +12,10 @@ TMax	'Maximal time to simulate [s]
 DeltaT	'Time Step fo the simulation [s]
 '--------------- PLOT
 Tsauv	'Time Step for writting in the output file [s]
+'--------------- Salt concentration (Multi-ionic module)
+Na_int		'Initial Na + concentraion in the Material []
+Cl_int		'Initial Na + concentraion in the Material []
+K_int		'Initial Na + concentraion in the Material []
+OH_int		'Initial Na + concentraion in the Material []
+Ca_int		'Initial Na + concentraion in the Material []
+SO4_int		'Initial Na + concentraion in the Material []
