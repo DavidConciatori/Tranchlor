@@ -4454,7 +4454,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
 #End Region
 
     Dim Var03 As Short = 0
-    Const Mat As Integer = 40
+    Const Mat As Integer = 41
     Dim Bara1(Mat, 10000) As String
     Dim ChoixRep As Short
     Dim nChmt As Short
@@ -5979,6 +5979,7 @@ b:                  frm01.ShowDialog()
         Bara1(18, rt) = TextBox9.Text   'température de référence pour l'énergie d'activation précédente
         Bara1(19, rt) = TextBox25.Text  'masse volumique des granulats 
         Bara1(20, rt) = TextBox26.Text  'masse volumique du ciment
+        Bara1(41, rt) = TextBox3.Text   'eau sur ciment pour le calcul Dcap
 
         Select Case Combo5.Text
             Case "Type 1"

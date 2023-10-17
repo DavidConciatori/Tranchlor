@@ -71,6 +71,7 @@ Public Class Compute1D
     Dim Nbreel(1) As Short
     Dim LenApp(1) As Single
     Dim EC(1) As Single
+    Dim EsC(1) As Single
     Dim tProt(1) As Single
     Dim Vct(1) As Single
     Dim Nct(1) As Single
@@ -287,6 +288,7 @@ Public Class Compute1D
         ReDim RoA(NQUAL)
         ReDim RoC(NQUAL)
         ReDim proba(NQUAL, 19)
+        ReDim EsC(NQUAL)
         For i = CShort(1) To NQUAL
             Input(nFic, Filebeton(i))
             Input(nFic, Fileres(i))
@@ -311,6 +313,7 @@ Public Class Compute1D
             For j = 0 To 19
                 Input(nFic, proba(i, j))
             Next
+            Input(nFic, EsC(i))
         Next i
 
         ReDim Creadtherm(1, 1)
@@ -424,9 +427,10 @@ Public Class Compute1D
     End Sub
 
     Public Function ReadExpo(ByRef INFile As String, ByRef NbreEn As Integer, ByRef Fit As Single, ByRef Temperature() As Decimal, ByRef Humidite() As Single, ByRef Sel() As Single,
-                             ByRef Msel As Decimal, ByRef Wsat As Single, ByRef TempMin As Decimal, ByRef TempMax As Single, ByRef TempEcart As Single) As Boolean
+                             ByRef Msel As Decimal, ByRef SAT() As Single, ByRef TempMin As Decimal, ByRef TempMax As Single, ByRef TempEcart As Single, ByRef nCouches As Integer, ByRef NQUAL As Integer, ByRef bordG As Boolean) As Boolean
 
         Dim nFic As Short = CShort(FreeFile())
+        Dim wsat As Single
 
         If INFile.Contains(".txt") = True Then
 
@@ -438,6 +442,13 @@ Public Class Compute1D
                 ReDim Humidite(NbreEn)
                 ReDim Sel(NbreEn)
                 ReDim Temperature(NbreEn)
+                If nCouches > 1 Then '03.10.2023 début
+                    If bordG = True Then
+                        wsat = SAT(1)
+                    Else
+                        wsat = SAT(nCouches)
+                    End If
+                End If  '03.10.2023 fin
 
                 For j As Integer = 1 To NbreEn
                     Input(CInt(nFic), Humidite(j))
@@ -446,7 +457,7 @@ Public Class Compute1D
                     If Temperature(j) > TempMax Then TempMax = Temperature(j)
                     If Temperature(j) < TempMin Then TempMin = Temperature(j)
                     Sel(j) *= CSng(35.453 / 58.443)    'calcul de cT à partir de co à multiplier par w(0) ou (dofs)
-                    If Msel < Sel(j) * Wsat Then Msel = CDec(Sel(j) * Wsat)
+                    If Msel < Sel(j) * wsat Then Msel = CDec(Sel(j) * wsat)
                 Next
                 FileClose(CInt(nFic))
 
@@ -480,7 +491,7 @@ Public Class Compute1D
                     If Temperature(j) > TempMax Then TempMax = Temperature(j)
                     If Temperature(j) < TempMin Then TempMin = Temperature(j)
                     Sel(j) *= CSng(35.453 / 58.443) 'calcul de cT à partir de co à multiplier par w(0) ou (dofs)
-                    If Msel < Sel(j) * Wsat Then Msel = CDec(Sel(j) * Wsat)
+                    If Msel < Sel(j) * wsat Then Msel = CDec(Sel(j) * wsat)
                 Next j
 
             Catch ex As Exception
@@ -642,11 +653,11 @@ Public Class Compute1D
         Dim FprobCap(2) As String
         Dim FprobCl(2) As String
         Dim FprobCa(2) As String
-        Dim Di As Single ' diffusion
+        'Dim Di As Single ' diffusion suppression 3.10.2023
         Dim CumW As Decimal ' water content cumulé [kg/m3]
         Dim CumH As Decimal ' humidité relative moyen
         'Dim CumClT As Decimal ' total chloride ions cumulé [kg/m3]
-        Dim Wsat As Single ' Saturated moisture content [kg/m3]
+        Dim Wsat As Single ' Saturated moisture content [kg/m3]   suppression 3.10.2023
         Dim BDlibre As Boolean
         Dim Gcptj As Long
         Dim Dcptj As Long
@@ -706,6 +717,9 @@ Public Class Compute1D
         Dim Hsym As Boolean
         Dim Ssym As Boolean
         Dim Tsym As Boolean
+        Dim nCouches As Integer
+        Dim EpCouches(1) As Double
+        Dim Can As Short
 
         ' redimension variables
         ReDim T_new(Dofs + CShort(1))
@@ -758,6 +772,19 @@ Public Class Compute1D
         'FileOpen(CInt(nFile), "R_HR_cumul.txt", OpenMode.Output)
 
         For Boucle1 = CShort(1) To NEXPO 'exposition direct, éclaboussures, brouillard
+            If NQUAL > 1 Then Can = MsgBox("Y a-t-il plusieurs couches ?", MsgBoxStyle.YesNo, "Avertissment") '03.10.2023 début
+            If Can = MsgBoxResult.Yes Then
+                nCouches = NQUAL
+            Else nCouches = 1
+            End If
+            If nCouches > 1 Then
+                ReDim EpCouches(nCouches - 1)
+                NQUAL = 1
+                EpCouches(0) = 0
+                For i = 1 To nCouches - 1
+                    EpCouches(i) = InputBox("Épaisseur de la couche no" & i & "? (max " & Length & " mm)", "Question", Length) + EpCouches(i - 1)
+                Next i
+            End If          '03.10.2023 fin
             For Boucle2 = CShort(1) To NQUAL 'qualité du béton bonne, moyenne, mauvaise
                 Bou2 = Boucle2
                 If proba(Boucle2, 0) = 0 Then
@@ -842,9 +869,13 @@ Public Class Compute1D
                                 CTmax = 1
 
                                 'coefficient de diffusion des ions de cl- + teneur en eau saturé
-                                Di = Dcl(Boucle2) 'mm2/s
-                                Wsat = SAT(Boucle2) 'kg/m3 bon béton
-
+                                'Di = Dcl(Boucle2) 'mm2/s 3.10.2023 suppression
+                                Wsat = SAT(Boucle2) 'kg/m3 bon béton 
+                                If nCouches > 1 Then '03.10.2023 début
+                                    For j = 1 To nCouches
+                                        If Wsat < SAT(j) Then Wsat = SAT(j)
+                                    Next j
+                                End If     '03.10.2023 fin
                                 Tijd = CDec(0)
                                 For i = CLng(0) To CLng(Dofs)  'conditions aux limites sur les noeuds
                                     'Cion(i) = Cion(i) * Wsat * 35.453 / 58.443
@@ -856,9 +887,27 @@ Public Class Compute1D
                                     T_old(i) = CDec(Ctherm(i))
                                     T_new(i) = CDec(Ctherm(i))
                                     T_trial(i) = CDec(Ctherm(i))
-                                    W(i) = Water(CDec(Chydr(i)), HAncien(i), T_new(i), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), Wsat, Hydr(Boucle2), ciment(Boucle2), Wol)
-                                    Ph(i) = pPH
-                                    Gamma(i) = System.Math.Exp(aOH * (1 - 10 ^ (Ph(i) - pPH))) * System.Math.Exp(EbG / R * (1 / (273.16 + T_new(i)) - 1 / toG)) * ciment(Boucle2) * Hydr(Boucle2) * faG / 1000
+                                    If nCouches > 1 Then '03.10.2023 début
+                                        For j = 1 To nCouches - 1
+                                            If PosProf(i) < EpCouches(j) Then
+                                                W(i) = Water(CDec(Chydr(i)), HAncien(i), T_new(i), Tijd, tProt(j), Vct(j), Nct(j), EC(j), SAT(j), Hydr(j), ciment(j), Wol)
+                                                Ph(i) = pPH
+                                                Gamma(i) = System.Math.Exp(aOH * (1 - 10 ^ (Ph(i) - pPH))) * System.Math.Exp(EbG / R * (1 / (273.16 + T_new(i)) - 1 / toG)) * ciment(j) * Hydr(j) * faG / 1000
+                                                Exit For
+                                            ElseIf j = nCouches - 1 Then
+                                                W(i) = Water(CDec(Chydr(i)), HAncien(i), T_new(i), Tijd, tProt(nCouches), Vct(nCouches), Nct(nCouches), EC(nCouches), SAT(nCouches), Hydr(nCouches), ciment(nCouches), Wol)
+                                                Ph(i) = pPH
+                                                Gamma(i) = System.Math.Exp(aOH * (1 - 10 ^ (Ph(i) - pPH))) * System.Math.Exp(EbG / R * (1 / (273.16 + T_new(i)) - 1 / toG)) * ciment(nCouches) * Hydr(nCouches) * faG / 1000
+                                                Exit For
+                                            End If
+                                        Next j
+                                    Else
+                                        W(i) = Water(CDec(Chydr(i)), HAncien(i), T_new(i), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), SAT(Boucle2), Hydr(Boucle2), ciment(Boucle2), Wol)
+                                        Ph(i) = pPH
+                                        Gamma(i) = System.Math.Exp(aOH * (1 - 10 ^ (Ph(i) - pPH))) * System.Math.Exp(EbG / R * (1 / (273.16 + T_new(i)) - 1 / toG)) * ciment(Boucle2) * Hydr(Boucle2) * faG / 1000
+                                    End If  '03.10.2023 fin
+
+
                                 Next i
                                 'Cion(Dofs + 1) = Cion(Dofs + 1) * Wsat * 35.453 / 58.443
                                 H_old(Dofs + 1) = CDec(Chydr(i))
@@ -869,7 +918,11 @@ Public Class Compute1D
                                 T_old(Dofs + 1) = CDec(Ctherm(Dofs))
                                 T_new(Dofs + 1) = CDec(Ctherm(Dofs))
                                 T_trial(Dofs + 1) = CDec(Ctherm(Dofs))
-                                W(Dofs + 1) = Water(CDec(Chydr(Dofs)), HAncien(Dofs), T_new(Dofs), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), Wsat, Hydr(Boucle2), ciment(Boucle2), Wol)
+                                If nCouches > 1 Then '03.10.2023 début
+                                    W(Dofs + 1) = Water(CDec(Chydr(Dofs)), HAncien(Dofs), T_new(Dofs), Tijd, tProt(nCouches), Vct(nCouches), Nct(nCouches), EC(nCouches), SAT(nCouches), Hydr(nCouches), ciment(nCouches), Wol)
+                                Else
+                                    W(Dofs + 1) = Water(CDec(Chydr(Dofs)), HAncien(Dofs), T_new(Dofs), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), SAT(Boucle2), Hydr(Boucle2), ciment(Boucle2), Wol)
+                                End If     '03.10.2023 fin
 
                                 Hleft = 0
                                 Hright = 0
@@ -909,7 +962,7 @@ Public Class Compute1D
                                 Tteller = CDbl(0)
                                 Carbteller = CDbl(0)
 
-                                If ReadExpo(FileGexpo(Boucle1), GNbreEn, GFiT, GTemperature, GHumidite, GSel, Msel, Wsat, TempMin, TempMax, TempEcart) = False Then
+                                If ReadExpo(FileGexpo(Boucle1), GNbreEn, GFiT, GTemperature, GHumidite, GSel, Msel, SAT, TempMin, TempMax, TempEcart, nCouches, NQUAL, True) = False Then '03.10.2023 ajout nCouches + NQUAL + 0 + changer wsat en SAT()
                                     MsgBox("ERROR: Exposition File not found!")
                                     GoTo BreakBoucle1
                                 End If
@@ -921,7 +974,7 @@ Public Class Compute1D
 
                                 If BDlibre = False Then
 
-                                    If ReadExpo(FileDexpo(Boucle1), DNbreEn, DFiT, DTemperature, DHumidite, DSel, Msel, Wsat, TempMin, TempMax, TempEcart) = True Then
+                                    If ReadExpo(FileDexpo(Boucle1), DNbreEn, DFiT, DTemperature, DHumidite, DSel, Msel, SAT, TempMin, TempMax, TempEcart, nCouches, NQUAL, False) = True Then   '03.10.2023 ajout nCouches + NQUAL + 0 + changer wsat en SAT()
 
                                         If GFiT <> DFiT Then MsgBox("fichier d'exposition incompatible", MsgBoxStyle.Information, "Avertissement")
                                         FiT = GFiT
@@ -1065,7 +1118,19 @@ Public Class Compute1D
                                     Next j
                                 Else    'avec approche probabiliste
                                     For j = CShort(1) To Dofs
-                                        Print(CInt(nFic4), C_new(j) * W(j) / (10 * ciment(Boucle2)), ",", TAB)
+                                        If nCouches > 1 Then '03.10.2023 début
+                                            For k = 1 To nCouches - 1
+                                                If PosProf(j) < EpCouches(k) Then
+                                                    Print(CInt(nFic4), C_new(j) * W(j) / (10 * ciment(k)), ",", TAB)
+                                                    Exit For
+                                                ElseIf k = nCouches - 1 Then
+                                                    Print(CInt(nFic4), C_new(j) * W(j) / (10 * ciment(nCouches)), ",", TAB)
+                                                    Exit For
+                                                End If
+                                            Next k
+                                        Else
+                                            Print(CInt(nFic4), C_new(j) * W(j) / (10 * ciment(Boucle2)), ",", TAB)
+                                        End If '03.10.2023 fin
                                     Next j
                                 End If
                                 PrintLine(CInt(nFic4), " ")
@@ -1238,8 +1303,22 @@ Again4:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                     Next j
                                     For j = CShort(0) To Dofs ' construction de la matrice LHS . h = RHS
                                         f1 = Le(j) / CDec(3.0)
-                                        f3 = f2 * MT(qGran(Boucle2), capCal, W(j), ciment(Boucle2), Hydr(Boucle2), T_old(j)) / Le(j)
-                                        If j = CShort(0) Or j = Dofs Then f3 = f3 * CDec(LambdaT(Boucle2))
+                                        If nCouches > 1 Then '03.10.2023 début
+                                            For k = 1 To nCouches - 1
+                                                If PosProf(j) < EpCouches(k) Then
+                                                    f3 = f2 * MT(qGran(k), capCal, W(j), ciment(k), Hydr(k), T_old(j)) / Le(j)
+                                                    If j = CShort(0) Or j = Dofs Then f3 = f3 * CDec(LambdaT(k))
+                                                    Exit For
+                                                ElseIf k = nCouches - 1 Then
+                                                    f3 = f2 * MT(qGran(nCouches), capCal, W(j), ciment(nCouches), Hydr(nCouches), T_old(j)) / Le(j)
+                                                    If j = CShort(0) Or j = Dofs Then f3 = f3 * CDec(LambdaT(nCouches))
+                                                    Exit For
+                                                End If
+                                            Next k
+                                        Else
+                                            f3 = f2 * MT(qGran(Boucle2), capCal, W(j), ciment(Boucle2), Hydr(Boucle2), T_old(j)) / Le(j)
+                                            If j = CShort(0) Or j = Dofs Then f3 = f3 * CDec(LambdaT(Boucle2))
+                                        End If     '03.10.2023 fin
                                         LHS(1, j) = LHS(1, j) + f1 + f3
                                         LHS(2, j) = LHS(2, j) + f1 / CDec(2.0) - f3
                                         LHS(1, j + CShort(1)) = LHS(1, j + CShort(1)) + f1 + f3
@@ -1350,36 +1429,103 @@ Again1:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                         Next
                                     End If
                                     'calcul du coefficient de capillarité
-                                    parA = 0.0000624775 * EC(Boucle2) ^ 2 - 0.00010384 * EC(Boucle2) + 0.0000300346
-                                    parA1 = 0.000000278804 * Tleft ^ 3 - 0.00000735523 * Tleft ^ 2 - 0.000278074 * Tleft - 0.012309435
-                                    parB1 = -0.000000303977 * Tleft ^ 3 + 0.00000797499 * Tleft ^ 2 + 0.00033679 * Tleft + 0.017793224
-                                    parC1 = 0.0000000800226 * Tleft ^ 3 - 0.00000226181 * Tleft ^ 2 - 0.0000897841 * Tleft - 0.004607865
-                                    parB = parA1 * EC(Boucle2) ^ 2 + parB1 * EC(Boucle2) + parC1
-                                    DcapLeft = parA * Hleft * 100 + parB
-                                    If DcapLeft < 0.000025 Then DcapLeft = 0.000025
-                                    If DcapLeft > 0.009 Then DcapLeft = 0.009
-                                    If BDlibre = False Then
-                                        parA1 = 0.000000278804 * Tright ^ 3 - 0.00000735523 * Tright ^ 2 - 0.000278074 * Tright - 0.012309435
-                                        parB1 = -0.000000303977 * Tright ^ 3 + 0.00000797499 * Tright ^ 2 + 0.00033679 * Tright + 0.017793224
-                                        parC1 = 0.0000000800226 * Tright ^ 3 - 0.00000226181 * Tright ^ 2 - 0.0000897841 * Tright - 0.004607865
-                                        parB = parA1 * EC(Boucle2) ^ 2 + parB1 * EC(Boucle2) + parC1
-                                        DcapRight = parA * Hright * 100 + parB
-                                        If DcapRight < 0.000025 Then DcapRight = 0.000025
-                                        If DcapRight > 0.009 Then DcapRight = 0.009
-                                    End If
+                                    If nCouches = 1 Then '03.10.2023 début
+                                        parA = 0.0000624775 * EsC(Boucle2) ^ 2 - 0.00010384 * EsC(Boucle2) + 0.0000300346
+                                        parA1 = 0.000000278804 * Tleft ^ 3 - 0.00000735523 * Tleft ^ 2 - 0.000278074 * Tleft - 0.012309435
+                                        parB1 = -0.000000303977 * Tleft ^ 3 + 0.00000797499 * Tleft ^ 2 + 0.00033679 * Tleft + 0.017793224
+                                        parC1 = 0.0000000800226 * Tleft ^ 3 - 0.00000226181 * Tleft ^ 2 - 0.0000897841 * Tleft - 0.004607865
+                                        parB = parA1 * EsC(Boucle2) ^ 2 + parB1 * EsC(Boucle2) + parC1
+                                        DcapLeft = parA * Hleft * 100 + parB
+                                        If DcapLeft < 0.000025 Then DcapLeft = 0.000025
+                                        If DcapLeft > 0.009 Then DcapLeft = 0.009
+                                        If BDlibre = False Then
+                                            parA1 = 0.000000278804 * Tright ^ 3 - 0.00000735523 * Tright ^ 2 - 0.000278074 * Tright - 0.012309435
+                                            parB1 = -0.000000303977 * Tright ^ 3 + 0.00000797499 * Tright ^ 2 + 0.00033679 * Tright + 0.017793224
+                                            parC1 = 0.0000000800226 * Tright ^ 3 - 0.00000226181 * Tright ^ 2 - 0.0000897841 * Tright - 0.004607865
+                                            parB = parA1 * EsC(Boucle2) ^ 2 + parB1 * EsC(Boucle2) + parC1
+                                            DcapRight = parA * Hright * 100 + parB
+                                            If DcapRight < 0.000025 Then DcapRight = 0.000025
+                                            If DcapRight > 0.009 Then DcapRight = 0.009
+                                        End If
+                                    End If    '03.10.2023 fin
 
                                     For j = CShort(0) To Dofs ' construction de la matrice LHS . h = RHS
-                                        Ha = (H_old(j) + H_old(j + CShort(1)) + H_trial(j) + H_trial(j + CShort(1))) / CDec(4.0)
-                                        f1 = Le(j) / CDec(3.0)
-                                        f3 = f2 * MDCdiff(Ha, CoefHr(Boucle3), PD(Bou2), Hc, aa, ED(Bou2), ToHydr(Bou2), T_old(j)) / Le(j)
+                                        If nCouches > 1 Then '03.10.2023 début
+                                            For k = 1 To nCouches - 1
+                                                If PosProf(j) < EpCouches(k) Then
+                                                    parA = 0.0000624775 * EsC(k) ^ 2 - 0.00010384 * EsC(k) + 0.0000300346
+                                                    parA1 = 0.000000278804 * Tleft ^ 3 - 0.00000735523 * Tleft ^ 2 - 0.000278074 * Tleft - 0.012309435
+                                                    parB1 = -0.000000303977 * Tleft ^ 3 + 0.00000797499 * Tleft ^ 2 + 0.00033679 * Tleft + 0.017793224
+                                                    parC1 = 0.0000000800226 * Tleft ^ 3 - 0.00000226181 * Tleft ^ 2 - 0.0000897841 * Tleft - 0.004607865
+                                                    parB = parA1 * EsC(k) ^ 2 + parB1 * EsC(k) + parC1
+                                                    DcapLeft = parA * Hleft * 100 + parB
+                                                    If DcapLeft < 0.000025 Then DcapLeft = 0.000025
+                                                    If DcapLeft > 0.009 Then DcapLeft = 0.009
+                                                    If BDlibre = False Then
+                                                        parA1 = 0.000000278804 * Tright ^ 3 - 0.00000735523 * Tright ^ 2 - 0.000278074 * Tright - 0.012309435
+                                                        parB1 = -0.000000303977 * Tright ^ 3 + 0.00000797499 * Tright ^ 2 + 0.00033679 * Tright + 0.017793224
+                                                        parC1 = 0.0000000800226 * Tright ^ 3 - 0.00000226181 * Tright ^ 2 - 0.0000897841 * Tright - 0.004607865
+                                                        parB = parA1 * EsC(k) ^ 2 + parB1 * EsC(k) + parC1
+                                                        DcapRight = parA * Hright * 100 + parB
+                                                        If DcapRight < 0.000025 Then DcapRight = 0.000025
+                                                        If DcapRight > 0.009 Then DcapRight = 0.009
+                                                    End If
+                                                    Ha = (H_old(j) + H_old(j + CShort(1)) + H_trial(j) + H_trial(j + CShort(1))) / CDec(4.0)
+                                                    f1 = Le(j) / CDec(3.0)
+                                                    f3 = f2 * MDCdiff(Ha, CoefHr(Boucle3), PD(k), Hc, aa, ED(k), ToHydr(k), T_old(j)) / Le(j)
+                                                    Exit For
+                                                ElseIf k = nCouches - 1 Then
+                                                    parA = 0.0000624775 * EsC(nCouches) ^ 2 - 0.00010384 * EsC(nCouches) + 0.0000300346
+                                                    parA1 = 0.000000278804 * Tleft ^ 3 - 0.00000735523 * Tleft ^ 2 - 0.000278074 * Tleft - 0.012309435
+                                                    parB1 = -0.000000303977 * Tleft ^ 3 + 0.00000797499 * Tleft ^ 2 + 0.00033679 * Tleft + 0.017793224
+                                                    parC1 = 0.0000000800226 * Tleft ^ 3 - 0.00000226181 * Tleft ^ 2 - 0.0000897841 * Tleft - 0.004607865
+                                                    parB = parA1 * EsC(nCouches) ^ 2 + parB1 * EsC(nCouches) + parC1
+                                                    DcapLeft = parA * Hleft * 100 + parB
+                                                    If DcapLeft < 0.000025 Then DcapLeft = 0.000025
+                                                    If DcapLeft > 0.009 Then DcapLeft = 0.009
+                                                    If BDlibre = False Then
+                                                        parA1 = 0.000000278804 * Tright ^ 3 - 0.00000735523 * Tright ^ 2 - 0.000278074 * Tright - 0.012309435
+                                                        parB1 = -0.000000303977 * Tright ^ 3 + 0.00000797499 * Tright ^ 2 + 0.00033679 * Tright + 0.017793224
+                                                        parC1 = 0.0000000800226 * Tright ^ 3 - 0.00000226181 * Tright ^ 2 - 0.0000897841 * Tright - 0.004607865
+                                                        parB = parA1 * EsC(nCouches) ^ 2 + parB1 * EsC(nCouches) + parC1
+                                                        DcapRight = parA * Hright * 100 + parB
+                                                        If DcapRight < 0.000025 Then DcapRight = 0.000025
+                                                        If DcapRight > 0.009 Then DcapRight = 0.009
+                                                    End If
+                                                    Ha = (H_old(j) + H_old(j + CShort(1)) + H_trial(j) + H_trial(j + CShort(1))) / CDec(4.0)
+                                                    f1 = Le(j) / CDec(3.0)
+                                                    f3 = f2 * MDCdiff(Ha, CoefHr(Boucle3), PD(nCouches), Hc, aa, ED(nCouches), ToHydr(nCouches), T_old(j)) / Le(j)
+                                                    Exit For
+                                                End If
+                                            Next k
+                                        End If
+                                        If nCouches = 1 Then
+                                            Ha = (H_old(j) + H_old(j + CShort(1)) + H_trial(j) + H_trial(j + CShort(1))) / CDec(4.0)
+                                            f1 = Le(j) / CDec(3.0)
+                                            f3 = f2 * MDCdiff(Ha, CoefHr(Boucle3), PD(Bou2), Hc, aa, ED(Bou2), ToHydr(Bou2), T_old(j)) / Le(j)
+                                        End If  '03.10.2023 fin
                                         If j < Gcptj Or j > Dcptj Then
                                             f5 = MDCcap(GHextern, DHextern, CoefCap(Boucle4), DeltaT, tPrec, j, Tijd, tijdOld, True, ab, tc, DcapLeft, DcapRight, BDlibre, PosProf(j), Length, LgLim, ImpHydr) * f2 / CDec(2)
                                         Else
                                             f5 = 0
                                         End If
                                         If j = CShort(0) Or j = Dofs Then
-                                            f3 = f3 * CDec(LambdaH(Boucle2))
-                                            f5 = f5 * CDec(LambdaH(Boucle2))
+                                            If nCouches > 1 Then '03.10.2023 début
+                                                For k = 1 To nCouches - 1
+                                                    If PosProf(j) < EpCouches(k) Then
+                                                        f3 = f3 * CDec(LambdaH(k))
+                                                        f5 = f5 * CDec(LambdaH(k))
+                                                        Exit For
+                                                    ElseIf k = nCouches - 1 Then
+                                                        f3 = f3 * CDec(LambdaH(nCouches))
+                                                        f5 = f5 * CDec(LambdaH(nCouches))
+                                                        Exit For
+                                                    End If
+                                                Next k
+                                            Else
+                                                f3 = f3 * CDec(LambdaH(Boucle2))
+                                                f5 = f5 * CDec(LambdaH(Boucle2))
+                                            End If     '03.10.2023 fin
                                         End If
                                         LHS(0, j) = LHS(0, j) + f1 / CDec(2.0) - f3 + f5
                                         LHS(1, j) = LHS(1, j) + f1 + f3 - f5
@@ -1447,8 +1593,22 @@ Again1:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                         If H_new(j) > CDec(1) Then H_new(j) = CDec(1) 'problème numérique
                                         If H_new(j) < CDec(0) Then H_new(j) = CDec(0)
                                         If i_day = 1 Then W_old(j) = W(j)
-                                        W(j) = Water(H_new(j), HAncien(j), T_new(j), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), Wsat, Hydr(Boucle2), ciment(Boucle2), Wol)
-                                        If W(j) < 0 Or W(j) > Wsat Then W(j) = Wsat * H_new(j)
+                                        If nCouches > 1 Then '03.10.2023 début
+                                            For k = 1 To nCouches - 1
+                                                If PosProf(j) < EpCouches(k) Then
+                                                    W(j) = Water(H_new(j), HAncien(j), T_new(j), Tijd, tProt(k), Vct(k), Nct(k), EC(k), SAT(k), Hydr(k), ciment(k), Wol)
+                                                    If W(j) < 0 Or W(j) > SAT(k) Then W(j) = SAT(k) * H_new(j)
+                                                    Exit For
+                                                ElseIf k = nCouches - 1 Then
+                                                    W(j) = Water(H_new(j), HAncien(j), T_new(j), Tijd, tProt(nCouches), Vct(nCouches), Nct(nCouches), EC(nCouches), SAT(nCouches), Hydr(nCouches), ciment(nCouches), Wol)
+                                                    If W(j) < 0 Or W(j) > SAT(nCouches) Then W(j) = SAT(nCouches) * H_new(j)
+                                                    Exit For
+                                                End If
+                                            Next k
+                                        Else
+                                            W(j) = Water(H_new(j), HAncien(j), T_new(j), Tijd, tProt(Boucle2), Vct(Boucle2), Nct(Boucle2), EC(Boucle2), SAT(Boucle2), Hydr(Boucle2), ciment(Boucle2), Wol)
+                                            If W(j) < 0 Or W(j) > SAT(Boucle2) Then W(j) = SAT(Boucle2) * H_new(j)
+                                        End If          '03.10.2023 fin
                                         If j >= Dofs / 3 And j <= 2 * Dofs / 3 And System.Math.Abs(W_old(j) - W(j)) < 5 Then TW = False
                                         If Cond01 = 0 Then HAncien(j) = H_new(j)
                                         If PosProf(j) < LgLim And j <> 0 And j <> Dofs + 1 Then
@@ -1479,7 +1639,19 @@ Again1:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                     If TW = True Then
                                         For j = CShort(2) To Dofs - CShort(1)
                                             W(j) = W_old(j) + (W(j) - W_old(j)) / (DeltaT / 36)
-                                            If W(j) < 0 Or W(j) > Wsat Then W(j) = Wsat * H_new(j)
+                                            If nCouches > 1 Then '03.10.2023 début
+                                                For k = 1 To nCouches - 1
+                                                    If PosProf(j) < EpCouches(k) Then
+                                                        If W(j) < 0 Or W(j) > SAT(k) Then W(j) = SAT(k) * H_new(j)
+                                                        Exit For
+                                                    ElseIf k = nCouches - 1 Then
+                                                        If W(j) < 0 Or W(j) > SAT(nCouches) Then W(j) = SAT(nCouches) * H_new(j)
+                                                        Exit For
+                                                    End If
+                                                Next k
+                                            Else
+                                                If W(j) < 0 Or W(j) > SAT(Boucle2) Then W(j) = SAT(Boucle2) * H_new(j)
+                                            End If    '03.10.2023 fin
                                         Next
                                     End If
                                     CumW = CDec(0)
@@ -1495,7 +1667,7 @@ Again1:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                     CumH = CumH / CDec(Length)
                                     CumW = CumW / CDec(Length)
 
-                                    'carbonatation-----------------------------------------------
+                                    'carbonatation----------------------------------------------- 03.10.2023 on ne prend pas en considération le multicouche dans la carbonatation
                                     GRHe = GRHe + GHextern * (DeltaT / (3600 * 24))
                                     If BDlibre = False Then DRHe = DRHe + DHextern * (DeltaT / (3600 * 24))
                                     CumTemps = CumTemps + (DeltaT / (3600 * 24))
@@ -1563,7 +1735,19 @@ Again1:                             For j = CShort(0) To Dofs + CShort(1) ' init
                                         End If
                                     End If
                                     For j = CShort(0) To Dofs       'vitesse par la diffusion de vapeur d'eau seule
-                                        Ae(j) = -MDCdiff(H_old(j), CoefHr(Boucle3), PD(Bou2), Hc, aa, ED(Bou2), ToHydr(Bou2), T_old(j)) * (H_old(j + CShort(1)) - H_old(j)) / CDec(2.0)
+                                        If nCouches > 1 Then '03.10.2023 début
+                                            For k = 1 To nCouches - 1
+                                                If PosProf(j) < EpCouches(k) Then
+                                                    Ae(j) = -MDCdiff(H_old(j), CoefHr(Boucle3), PD(k), Hc, aa, ED(k), ToHydr(k), T_old(j)) * (H_old(j + CShort(1)) - H_old(j)) / CDec(2.0)
+                                                    Exit For
+                                                ElseIf k = nCouches - 1 Then
+                                                    Ae(j) = -MDCdiff(H_old(j), CoefHr(Boucle3), PD(nCouches), Hc, aa, ED(nCouches), ToHydr(nCouches), T_old(j)) * (H_old(j + CShort(1)) - H_old(j)) / CDec(2.0)
+                                                    Exit For
+                                                End If
+                                            Next k
+                                        Else
+                                            Ae(j) = -MDCdiff(H_old(j), CoefHr(Boucle3), PD(Bou2), Hc, aa, ED(Bou2), ToHydr(Bou2), T_old(j)) * (H_old(j + CShort(1)) - H_old(j)) / CDec(2.0)
+                                        End If    '03.10.2023 fin
                                     Next
                                     For j = CShort(0) To Dofs
                                         If Ae(j) > 0 And (j < Gcptj Or j > Dcptj) Then      'prise en compte de la capillarité
@@ -1675,7 +1859,19 @@ Again2:                                 If jj = 1 Then
                                                 Mcap = Ha + CDec(Gamma(j) * C_trial(j) ^ (-0.621))
                                             End If
                                             f1 = Mcap * Le(j) / CDec(3.0)
-                                            f3 = f2 * Ha * MDCl(Di, Ecl(Bou2), ToCl(Bou2), T_old(j), CoefCl(Boucle5)) / Le(j)
+                                            If nCouches > 1 Then '03.10.2023 début
+                                                For k = 1 To nCouches - 1
+                                                    If PosProf(j) < EpCouches(k) Then
+                                                        f3 = f2 * Ha * MDCl(Dcl(k), Ecl(k), ToCl(k), T_old(j), CoefCl(Boucle5)) / Le(j)
+                                                        Exit For
+                                                    ElseIf k = nCouches - 1 Then
+                                                        f3 = f2 * Ha * MDCl(Dcl(nCouches), Ecl(nCouches), ToCl(nCouches), T_old(j), CoefCl(Boucle5)) / Le(j)
+                                                        Exit For
+                                                    End If
+                                                Next k
+                                            Else
+                                                f3 = f2 * Ha * MDCl(Dcl(Bou2), Ecl(Bou2), ToCl(Bou2), T_old(j), CoefCl(Boucle5)) / Le(j)
+                                            End If
                                             LHS(1, j) = LHS(1, j) + (f1 + f3) * DB + 3 * Le(j) * CB
                                             LHS(2, j) = LHS(2, j) + (f1 / CDec(2.0) - f3) * DB + Le(j) * CB
                                             LHS(1, j + CShort(1)) = LHS(1, j + CShort(1)) + (f1 + f3) * DB + 3 * Le(j) * CB
@@ -1841,7 +2037,7 @@ Again2:                                 If jj = 1 Then
                                     End If
                                     If i >= CLng(CLteller) Then '1 an ou 365 jours
                                         CLteller = CLteller + CDbl(CLsauv)
-                                        Regist01(nFic4, Tijd, Dofs, C_new, W, ciment(Boucle2), NprobHr + NprobCap + NprobCl)
+                                        Regist01(nFic4, Tijd, Dofs, C_new, W, ciment, NprobHr + NprobCap + NprobCl, nCouches, EpCouches, Boucle2)   '03.10.2023 changement ciment(Boucle2) par ciment
                                         PrintLine(nFic4, " ")
                                     End If
                                     If i >= CLng(Tteller) Then '1 an ou 365 jours
@@ -1918,16 +2114,32 @@ BreakBoucle1:
     End Sub
 
     'Enregistrement des données dans le fichier d'output pour l'humidité relative
-    Private Sub Regist01(ByRef nFic1 As Short, ByRef Tijd As Decimal, ByRef Dofs As Short, ByRef CL_new() As Decimal, ByRef W() As Decimal, ByRef Ciment As Single, ByRef Para As Short)
+    Private Sub Regist01(ByRef nFic1 As Short, ByRef Tijd As Decimal, ByRef Dofs As Short, ByRef CL_new() As Decimal, ByRef W() As Decimal, ByRef Ciment() As Single, ByRef Para As Short, ByRef nCouches As Integer, ByRef EpCouches() As Double, ByRef Boucle2 As Short)
 
         Dim j As Short
+        Dim k As Short
+        Dim Cim As Single
+
         'Register values
         Print(CInt(nFic1), Tijd / 365, ",", Tijd, ",", TAB)
         For j = CShort(1) To Dofs
+            If nCouches > 1 Then '03.10.2023 début
+                For k = 1 To nCouches - 1
+                    If PosProf(j) < EpCouches(k) Then
+                        Cim = Ciment(k)
+                        Exit For
+                    ElseIf k = nCouches - 1 Then
+                        Cim = Ciment(nCouches)
+                        Exit For
+                    End If
+                Next k
+            Else
+                Cim = Ciment(Boucle2)
+            End If          '03.10.2023 fin
             If Para = 3 Then
                 Print(CInt(nFic1), CL_new(j) * W(j) / 1000, ",", TAB)
             Else        'avec traitement probabiliste
-                Print(CInt(nFic1), CL_new(j) * W(j) / (10 * Ciment), ",", TAB)
+                Print(CInt(nFic1), CL_new(j) * W(j) / (10 * Cim), ",", TAB)
             End If
         Next j
 
