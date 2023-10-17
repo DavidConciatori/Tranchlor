@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Linq
-Public Class Compute2D_trial
+Public Class Compute2Dtrial
     Dim ind As Integer
     Dim directory As String
     Dim wsat As Double
@@ -833,232 +833,232 @@ Public Class Compute2D_trial
                 tor_loc1 = tor * f_cr
             Else
                 tor_loc1 = tor
-                    End If
+            End If
 
             If cr_node2 = 1 Then
                 tor_loc2 = tor * f_cr
             Else
                 tor_loc2 = tor
-                    End If
+            End If
 
             If cr_node3 = 1 Then
                 tor_loc3 = tor * f_cr
             Else
                 tor_loc3 = tor
-                    End If
+            End If
 
             If cr_node4 = 1 Then
                 tor_loc4 = tor * f_cr
             Else
                 tor_loc4 = tor
-                    End If
+            End If
 
             'new program using nodal interpolations instead of mean value on elements to calculate diffusion coefficient 2021.09.03 Xuande
             Dim d_C1_1 As Double = GetD_MI(D0_Na, tor_loc1) ' Xuande, 2021.09.03 nodal Na + concentrations
-                Dim d_C1_2 As Double = GetD_MI(D0_Na, tor_loc2)
-                Dim d_C1_3 As Double = GetD_MI(D0_Na, tor_loc3)
-                Dim d_C1_4 As Double = GetD_MI(D0_Na, tor_loc4)
-                cieNew1 = New CIETrans_MI(
+            Dim d_C1_2 As Double = GetD_MI(D0_Na, tor_loc2)
+            Dim d_C1_3 As Double = GetD_MI(D0_Na, tor_loc3)
+            Dim d_C1_4 As Double = GetD_MI(D0_Na, tor_loc4)
+            cieNew1 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C1_1, d_C1_2, d_C1_3, d_C1_4, wr, F, z_Na, E, R, T, grad_logGamma)
 
-                Dim d_C2_1 As Double = GetD_MI(D0_Cl, tor_loc1) ' Xuande, 2021.09.03 nodal Cl - concentrations
-                Dim d_C2_2 As Double = GetD_MI(D0_Cl, tor_loc2)
-                Dim d_C2_3 As Double = GetD_MI(D0_Cl, tor_loc3)
-                Dim d_C2_4 As Double = GetD_MI(D0_Cl, tor_loc4)
-                cieNew2 = New CIETrans_MI(
+            Dim d_C2_1 As Double = GetD_MI(D0_Cl, tor_loc1) ' Xuande, 2021.09.03 nodal Cl - concentrations
+            Dim d_C2_2 As Double = GetD_MI(D0_Cl, tor_loc2)
+            Dim d_C2_3 As Double = GetD_MI(D0_Cl, tor_loc3)
+            Dim d_C2_4 As Double = GetD_MI(D0_Cl, tor_loc4)
+            cieNew2 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C2_1, d_C2_2, d_C2_3, d_C2_4, wr, F, z_Cl, E, R, T, grad_logGamma)
 
-                Dim d_C3_1 As Double = GetD_MI(D0_K, tor_loc1) ' Xuande, 2021.09.03 nodal K + concentrations
-                Dim d_C3_2 As Double = GetD_MI(D0_K, tor_loc2)
-                Dim d_C3_3 As Double = GetD_MI(D0_K, tor_loc3)
-                Dim d_C3_4 As Double = GetD_MI(D0_K, tor_loc4)
-                cieNew3 = New CIETrans_MI(
+            Dim d_C3_1 As Double = GetD_MI(D0_K, tor_loc1) ' Xuande, 2021.09.03 nodal K + concentrations
+            Dim d_C3_2 As Double = GetD_MI(D0_K, tor_loc2)
+            Dim d_C3_3 As Double = GetD_MI(D0_K, tor_loc3)
+            Dim d_C3_4 As Double = GetD_MI(D0_K, tor_loc4)
+            cieNew3 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C3_1, d_C3_2, d_C3_3, d_C3_4, wr, F, z_K, E, R, T, grad_logGamma)
 
-                Dim d_C4_1 As Double = GetD_MI(D0_OH, tor_loc1) ' Xuande, 2021.09.03 nodal OH - concentrations
-                Dim d_C4_2 As Double = GetD_MI(D0_OH, tor_loc2)
-                Dim d_C4_3 As Double = GetD_MI(D0_OH, tor_loc3)
-                Dim d_C4_4 As Double = GetD_MI(D0_OH, tor_loc4)
-                cieNew4 = New CIETrans_MI(
+            Dim d_C4_1 As Double = GetD_MI(D0_OH, tor_loc1) ' Xuande, 2021.09.03 nodal OH - concentrations
+            Dim d_C4_2 As Double = GetD_MI(D0_OH, tor_loc2)
+            Dim d_C4_3 As Double = GetD_MI(D0_OH, tor_loc3)
+            Dim d_C4_4 As Double = GetD_MI(D0_OH, tor_loc4)
+            cieNew4 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C4_1, d_C4_2, d_C4_3, d_C4_4, wr, F, z_OH, E, R, T, grad_logGamma)
 
-                Dim d_C5_1 As Double = GetD_MI(D0_Ca, tor_loc1) ' Xuande, 2021.09.03 nodal Ca 2+ concentrations
-                Dim d_C5_2 As Double = GetD_MI(D0_Ca, tor_loc2)
-                Dim d_C5_3 As Double = GetD_MI(D0_Ca, tor_loc3)
-                Dim d_C5_4 As Double = GetD_MI(D0_Ca, tor_loc4)
-                cieNew5 = New CIETrans_MI(
+            Dim d_C5_1 As Double = GetD_MI(D0_Ca, tor_loc1) ' Xuande, 2021.09.03 nodal Ca 2+ concentrations
+            Dim d_C5_2 As Double = GetD_MI(D0_Ca, tor_loc2)
+            Dim d_C5_3 As Double = GetD_MI(D0_Ca, tor_loc3)
+            Dim d_C5_4 As Double = GetD_MI(D0_Ca, tor_loc4)
+            cieNew5 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C5_1, d_C5_2, d_C5_3, d_C5_4, wr, F, z_Ca, E, R, T, grad_logGamma)
 
-                Dim d_C6_1 As Double = GetD_MI(D0_SO4, tor_loc1) ' Xuande, 2021.09.03 nodal SO4 2- concentrations
-                Dim d_C6_2 As Double = GetD_MI(D0_SO4, tor_loc2)
-                Dim d_C6_3 As Double = GetD_MI(D0_SO4, tor_loc3)
-                Dim d_C6_4 As Double = GetD_MI(D0_SO4, tor_loc4)
-                cieNew6 = New CIETrans_MI(
+            Dim d_C6_1 As Double = GetD_MI(D0_SO4, tor_loc1) ' Xuande, 2021.09.03 nodal SO4 2- concentrations
+            Dim d_C6_2 As Double = GetD_MI(D0_SO4, tor_loc2)
+            Dim d_C6_3 As Double = GetD_MI(D0_SO4, tor_loc3)
+            Dim d_C6_4 As Double = GetD_MI(D0_SO4, tor_loc4)
+            cieNew6 = New CIETrans_MI(
                               Nodes(Elements(i).Node1 - 1).x, Nodes(Elements(i).Node1 - 1).y,
                               Nodes(Elements(i).Node2 - 1).x, Nodes(Elements(i).Node2 - 1).y,
                               Nodes(Elements(i).Node3 - 1).x, Nodes(Elements(i).Node3 - 1).y,
                               Nodes(Elements(i).Node4 - 1).x, Nodes(Elements(i).Node4 - 1).y,
                               d_C6_1, d_C6_2, d_C6_3, d_C6_4, wr, F, z_SO4, E, R, T, grad_logGamma)
 
-                'flux Na + and matrix assembling, xuande 2021.09.03
-                Dim J1_C1_inv As Double(,) = cieNew1.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C1_inv As Double(,) = cieNew1.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C1_inv As Double(,) = cieNew1.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C1_inv As Double(,) = cieNew1.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C1_mat1 As Double(,) = cieNew1.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C1_mat2 As Double(,) = cieNew1.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C1_mat3 As Double(,) = cieNew1.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C1_mat4 As Double(,) = cieNew1.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C1_x1 As Double = cieNew1.getXFlux(D_C1_mat1(0, 0), C1_ele, J1_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C1_x2 As Double = cieNew1.getXFlux(D_C1_mat2(0, 0), C1_ele, J2_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C1_x3 As Double = cieNew1.getXFlux(D_C1_mat3(0, 0), C1_ele, J3_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C1_x4 As Double = cieNew1.getXFlux(D_C1_mat4(0, 0), C1_ele, J4_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C1_y1 As Double = cieNew1.getYFlux(D_C1_mat1(1, 1), C1_ele, J1_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C1_y2 As Double = cieNew1.getYFlux(D_C1_mat2(1, 1), C1_ele, J2_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C1_y3 As Double = cieNew1.getYFlux(D_C1_mat3(1, 1), C1_ele, J3_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C1_y4 As Double = cieNew1.getYFlux(D_C1_mat4(1, 1), C1_ele, J4_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C1X As Double() = getve(flux_C1_x1, flux_C1_x2, flux_C1_x3, flux_C1_x4)
-                Dim vec_flux_C1Y As Double() = getve(flux_C1_y1, flux_C1_y2, flux_C1_y3, flux_C1_y4)
-                AssembleVg(vec_flux_C1X, J1X, Elements, i)
-                AssembleVg(vec_flux_C1Y, J1Y, Elements, i)
-                AssembleKg(cieNew1.getbe_MI, bg1, Elements, i)
-                AssembleKg(cieNew1.getAe_MI, Ag1, Elements, i)
-                'flux Cl - and matrix assembling, xuande 2021.09.03
-                Dim J1_C2_inv As Double(,) = cieNew2.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C2_inv As Double(,) = cieNew2.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C2_inv As Double(,) = cieNew2.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C2_inv As Double(,) = cieNew2.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C2_mat1 As Double(,) = cieNew2.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C2_mat2 As Double(,) = cieNew2.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C2_mat3 As Double(,) = cieNew2.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C2_mat4 As Double(,) = cieNew2.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C2_x1 As Double = cieNew2.getXFlux(D_C2_mat1(0, 0), C2_ele, J1_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C2_x2 As Double = cieNew2.getXFlux(D_C2_mat2(0, 0), C2_ele, J2_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C2_x3 As Double = cieNew2.getXFlux(D_C2_mat3(0, 0), C2_ele, J3_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C2_x4 As Double = cieNew2.getXFlux(D_C2_mat4(0, 0), C2_ele, J4_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C2_y1 As Double = cieNew2.getYFlux(D_C2_mat1(1, 1), C2_ele, J1_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C2_y2 As Double = cieNew2.getYFlux(D_C2_mat2(1, 1), C2_ele, J2_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C2_y3 As Double = cieNew2.getYFlux(D_C2_mat3(1, 1), C2_ele, J3_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C2_y4 As Double = cieNew2.getYFlux(D_C2_mat4(1, 1), C2_ele, J4_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C2X As Double() = getve(flux_C2_x1, flux_C2_x2, flux_C2_x3, flux_C2_x4)
-                Dim vec_flux_C2Y As Double() = getve(flux_C2_y1, flux_C2_y2, flux_C2_y3, flux_C2_y4)
-                AssembleVg(vec_flux_C2X, J2X, Elements, i)
-                AssembleVg(vec_flux_C2Y, J2Y, Elements, i)
-                AssembleKg(cieNew2.getbe_MI, bg2, Elements, i)
-                AssembleKg(cieNew2.getAe_MI, Ag2, Elements, i)
-                'flux K + and matrix assembling, xuande 2021.09.03
-                Dim J1_C3_inv As Double(,) = cieNew3.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C3_inv As Double(,) = cieNew3.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C3_inv As Double(,) = cieNew3.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C3_inv As Double(,) = cieNew3.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C3_mat1 As Double(,) = cieNew3.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C3_mat2 As Double(,) = cieNew3.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C3_mat3 As Double(,) = cieNew3.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C3_mat4 As Double(,) = cieNew3.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C3_x1 As Double = cieNew3.getXFlux(D_C3_mat1(0, 0), C3_ele, J1_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C3_x2 As Double = cieNew3.getXFlux(D_C3_mat2(0, 0), C3_ele, J2_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C3_x3 As Double = cieNew3.getXFlux(D_C3_mat3(0, 0), C3_ele, J3_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C3_x4 As Double = cieNew3.getXFlux(D_C3_mat4(0, 0), C3_ele, J4_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C3_y1 As Double = cieNew3.getYFlux(D_C3_mat1(1, 1), C3_ele, J1_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C3_y2 As Double = cieNew3.getYFlux(D_C3_mat2(1, 1), C3_ele, J2_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C3_y3 As Double = cieNew3.getYFlux(D_C3_mat3(1, 1), C3_ele, J3_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C3_y4 As Double = cieNew3.getYFlux(D_C3_mat4(1, 1), C3_ele, J4_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C3X As Double() = getve(flux_C3_x1, flux_C3_x2, flux_C3_x3, flux_C3_x4)
-                Dim vec_flux_C3Y As Double() = getve(flux_C3_y1, flux_C3_y2, flux_C3_y3, flux_C3_y4)
-                AssembleVg(vec_flux_C3X, J3X, Elements, i)
-                AssembleVg(vec_flux_C3Y, J3Y, Elements, i)
-                AssembleKg(cieNew3.getbe_MI, bg3, Elements, i)
-                AssembleKg(cieNew3.getAe_MI, Ag3, Elements, i)
-                'flux OH - and matrix assembling, xuande 2021.09.03
-                Dim J1_C4_inv As Double(,) = cieNew4.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C4_inv As Double(,) = cieNew4.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C4_inv As Double(,) = cieNew4.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C4_inv As Double(,) = cieNew4.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C4_mat1 As Double(,) = cieNew4.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C4_mat2 As Double(,) = cieNew4.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C4_mat3 As Double(,) = cieNew4.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C4_mat4 As Double(,) = cieNew4.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C4_x1 As Double = cieNew4.getXFlux(D_C4_mat1(0, 0), C4_ele, J1_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C4_x2 As Double = cieNew4.getXFlux(D_C4_mat2(0, 0), C4_ele, J2_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C4_x3 As Double = cieNew4.getXFlux(D_C4_mat3(0, 0), C4_ele, J3_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C4_x4 As Double = cieNew4.getXFlux(D_C4_mat4(0, 0), C4_ele, J4_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C4_y1 As Double = cieNew4.getYFlux(D_C4_mat1(1, 1), C4_ele, J1_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C4_y2 As Double = cieNew4.getYFlux(D_C4_mat2(1, 1), C4_ele, J2_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C4_y3 As Double = cieNew4.getYFlux(D_C4_mat3(1, 1), C4_ele, J3_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C4_y4 As Double = cieNew4.getYFlux(D_C4_mat4(1, 1), C4_ele, J4_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C4X As Double() = getve(flux_C4_x1, flux_C4_x2, flux_C4_x3, flux_C4_x4)
-                Dim vec_flux_C4Y As Double() = getve(flux_C4_y1, flux_C4_y2, flux_C4_y3, flux_C4_y4)
-                AssembleVg(vec_flux_C4X, J4X, Elements, i)
-                AssembleVg(vec_flux_C4Y, J4Y, Elements, i)
-                AssembleKg(cieNew4.getbe_MI, bg4, Elements, i)
-                AssembleKg(cieNew4.getAe_MI, Ag4, Elements, i)
-                'flux Ca 2+ and matrix assembling, xuande 2021.09.03
-                Dim J1_C5_inv As Double(,) = cieNew5.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C5_inv As Double(,) = cieNew5.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C5_inv As Double(,) = cieNew5.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C5_inv As Double(,) = cieNew5.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C5_mat1 As Double(,) = cieNew5.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C5_mat2 As Double(,) = cieNew5.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C5_mat3 As Double(,) = cieNew5.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C5_mat4 As Double(,) = cieNew5.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C5_x1 As Double = cieNew5.getXFlux(D_C5_mat1(0, 0), C5_ele, J1_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C5_x2 As Double = cieNew5.getXFlux(D_C5_mat2(0, 0), C5_ele, J2_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C5_x3 As Double = cieNew5.getXFlux(D_C5_mat3(0, 0), C5_ele, J3_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C5_x4 As Double = cieNew5.getXFlux(D_C5_mat4(0, 0), C5_ele, J4_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C5_y1 As Double = cieNew5.getYFlux(D_C5_mat1(1, 1), C5_ele, J1_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C5_y2 As Double = cieNew5.getYFlux(D_C5_mat2(1, 1), C5_ele, J2_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C5_y3 As Double = cieNew5.getYFlux(D_C5_mat3(1, 1), C5_ele, J3_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C5_y4 As Double = cieNew5.getYFlux(D_C5_mat4(1, 1), C5_ele, J4_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C5X As Double() = getve(flux_C5_x1, flux_C5_x2, flux_C5_x3, flux_C5_x4)
-                Dim vec_flux_C5Y As Double() = getve(flux_C5_y1, flux_C5_y2, flux_C5_y3, flux_C5_y4)
-                AssembleVg(vec_flux_C5X, J5X, Elements, i)
-                AssembleVg(vec_flux_C5Y, J5Y, Elements, i)
-                AssembleKg(cieNew5.getbe_MI, bg5, Elements, i)
-                AssembleKg(cieNew5.getAe_MI, Ag5, Elements, i)
-                'flux SO4 2- and matrix assembling, xuande 2021.09.03
-                Dim J1_C6_inv As Double(,) = cieNew6.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J2_C6_inv As Double(,) = cieNew6.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim J3_C6_inv As Double(,) = cieNew6.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim J4_C6_inv As Double(,) = cieNew6.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C6_mat1 As Double(,) = cieNew6.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C6_mat2 As Double(,) = cieNew6.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
-                Dim D_C6_mat3 As Double(,) = cieNew6.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim D_C6_mat4 As Double(,) = cieNew6.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
-                Dim flux_C6_x1 As Double = cieNew6.getXFlux(D_C6_mat1(0, 0), C6_ele, J1_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C6_x2 As Double = cieNew6.getXFlux(D_C6_mat2(0, 0), C6_ele, J2_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C6_x3 As Double = cieNew6.getXFlux(D_C6_mat3(0, 0), C6_ele, J3_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C6_x4 As Double = cieNew6.getXFlux(D_C6_mat4(0, 0), C6_ele, J4_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C6_y1 As Double = cieNew6.getYFlux(D_C6_mat1(1, 1), C6_ele, J1_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C6_y2 As Double = cieNew6.getYFlux(D_C6_mat2(1, 1), C6_ele, J2_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
-                Dim flux_C6_y3 As Double = cieNew6.getYFlux(D_C6_mat3(1, 1), C6_ele, J3_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim flux_C6_y4 As Double = cieNew6.getYFlux(D_C6_mat4(1, 1), C6_ele, J4_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
-                Dim vec_flux_C6X As Double() = getve(flux_C6_x1, flux_C6_x2, flux_C6_x3, flux_C6_x4)
-                Dim vec_flux_C6Y As Double() = getve(flux_C6_y1, flux_C6_y2, flux_C6_y3, flux_C6_y4)
-                AssembleVg(vec_flux_C6X, J6X, Elements, i)
-                AssembleVg(vec_flux_C6Y, J6Y, Elements, i)
-                AssembleKg(cieNew6.getbe_MI, bg6, Elements, i)
-                AssembleKg(cieNew6.getAe_MI, Ag6, Elements, i)
-            Next
+            'flux Na + and matrix assembling, xuande 2021.09.03
+            Dim J1_C1_inv As Double(,) = cieNew1.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C1_inv As Double(,) = cieNew1.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C1_inv As Double(,) = cieNew1.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C1_inv As Double(,) = cieNew1.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C1_mat1 As Double(,) = cieNew1.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C1_mat2 As Double(,) = cieNew1.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C1_mat3 As Double(,) = cieNew1.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C1_mat4 As Double(,) = cieNew1.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C1_x1 As Double = cieNew1.getXFlux(D_C1_mat1(0, 0), C1_ele, J1_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C1_x2 As Double = cieNew1.getXFlux(D_C1_mat2(0, 0), C1_ele, J2_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C1_x3 As Double = cieNew1.getXFlux(D_C1_mat3(0, 0), C1_ele, J3_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C1_x4 As Double = cieNew1.getXFlux(D_C1_mat4(0, 0), C1_ele, J4_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C1_y1 As Double = cieNew1.getYFlux(D_C1_mat1(1, 1), C1_ele, J1_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C1_y2 As Double = cieNew1.getYFlux(D_C1_mat2(1, 1), C1_ele, J2_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C1_y3 As Double = cieNew1.getYFlux(D_C1_mat3(1, 1), C1_ele, J3_C1_inv, cieNew1.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C1_y4 As Double = cieNew1.getYFlux(D_C1_mat4(1, 1), C1_ele, J4_C1_inv, cieNew1.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C1X As Double() = getve(flux_C1_x1, flux_C1_x2, flux_C1_x3, flux_C1_x4)
+            Dim vec_flux_C1Y As Double() = getve(flux_C1_y1, flux_C1_y2, flux_C1_y3, flux_C1_y4)
+            AssembleVg(vec_flux_C1X, J1X, Elements, i)
+            AssembleVg(vec_flux_C1Y, J1Y, Elements, i)
+            AssembleKg(cieNew1.getbe_MI, bg1, Elements, i)
+            AssembleKg(cieNew1.getAe_MI, Ag1, Elements, i)
+            'flux Cl - and matrix assembling, xuande 2021.09.03
+            Dim J1_C2_inv As Double(,) = cieNew2.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C2_inv As Double(,) = cieNew2.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C2_inv As Double(,) = cieNew2.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C2_inv As Double(,) = cieNew2.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C2_mat1 As Double(,) = cieNew2.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C2_mat2 As Double(,) = cieNew2.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C2_mat3 As Double(,) = cieNew2.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C2_mat4 As Double(,) = cieNew2.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C2_x1 As Double = cieNew2.getXFlux(D_C2_mat1(0, 0), C2_ele, J1_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C2_x2 As Double = cieNew2.getXFlux(D_C2_mat2(0, 0), C2_ele, J2_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C2_x3 As Double = cieNew2.getXFlux(D_C2_mat3(0, 0), C2_ele, J3_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C2_x4 As Double = cieNew2.getXFlux(D_C2_mat4(0, 0), C2_ele, J4_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C2_y1 As Double = cieNew2.getYFlux(D_C2_mat1(1, 1), C2_ele, J1_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C2_y2 As Double = cieNew2.getYFlux(D_C2_mat2(1, 1), C2_ele, J2_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C2_y3 As Double = cieNew2.getYFlux(D_C2_mat3(1, 1), C2_ele, J3_C2_inv, cieNew2.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C2_y4 As Double = cieNew2.getYFlux(D_C2_mat4(1, 1), C2_ele, J4_C2_inv, cieNew2.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C2X As Double() = getve(flux_C2_x1, flux_C2_x2, flux_C2_x3, flux_C2_x4)
+            Dim vec_flux_C2Y As Double() = getve(flux_C2_y1, flux_C2_y2, flux_C2_y3, flux_C2_y4)
+            AssembleVg(vec_flux_C2X, J2X, Elements, i)
+            AssembleVg(vec_flux_C2Y, J2Y, Elements, i)
+            AssembleKg(cieNew2.getbe_MI, bg2, Elements, i)
+            AssembleKg(cieNew2.getAe_MI, Ag2, Elements, i)
+            'flux K + and matrix assembling, xuande 2021.09.03
+            Dim J1_C3_inv As Double(,) = cieNew3.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C3_inv As Double(,) = cieNew3.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C3_inv As Double(,) = cieNew3.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C3_inv As Double(,) = cieNew3.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C3_mat1 As Double(,) = cieNew3.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C3_mat2 As Double(,) = cieNew3.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C3_mat3 As Double(,) = cieNew3.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C3_mat4 As Double(,) = cieNew3.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C3_x1 As Double = cieNew3.getXFlux(D_C3_mat1(0, 0), C3_ele, J1_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C3_x2 As Double = cieNew3.getXFlux(D_C3_mat2(0, 0), C3_ele, J2_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C3_x3 As Double = cieNew3.getXFlux(D_C3_mat3(0, 0), C3_ele, J3_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C3_x4 As Double = cieNew3.getXFlux(D_C3_mat4(0, 0), C3_ele, J4_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C3_y1 As Double = cieNew3.getYFlux(D_C3_mat1(1, 1), C3_ele, J1_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C3_y2 As Double = cieNew3.getYFlux(D_C3_mat2(1, 1), C3_ele, J2_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C3_y3 As Double = cieNew3.getYFlux(D_C3_mat3(1, 1), C3_ele, J3_C3_inv, cieNew3.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C3_y4 As Double = cieNew3.getYFlux(D_C3_mat4(1, 1), C3_ele, J4_C3_inv, cieNew3.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C3X As Double() = getve(flux_C3_x1, flux_C3_x2, flux_C3_x3, flux_C3_x4)
+            Dim vec_flux_C3Y As Double() = getve(flux_C3_y1, flux_C3_y2, flux_C3_y3, flux_C3_y4)
+            AssembleVg(vec_flux_C3X, J3X, Elements, i)
+            AssembleVg(vec_flux_C3Y, J3Y, Elements, i)
+            AssembleKg(cieNew3.getbe_MI, bg3, Elements, i)
+            AssembleKg(cieNew3.getAe_MI, Ag3, Elements, i)
+            'flux OH - and matrix assembling, xuande 2021.09.03
+            Dim J1_C4_inv As Double(,) = cieNew4.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C4_inv As Double(,) = cieNew4.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C4_inv As Double(,) = cieNew4.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C4_inv As Double(,) = cieNew4.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C4_mat1 As Double(,) = cieNew4.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C4_mat2 As Double(,) = cieNew4.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C4_mat3 As Double(,) = cieNew4.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C4_mat4 As Double(,) = cieNew4.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C4_x1 As Double = cieNew4.getXFlux(D_C4_mat1(0, 0), C4_ele, J1_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C4_x2 As Double = cieNew4.getXFlux(D_C4_mat2(0, 0), C4_ele, J2_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C4_x3 As Double = cieNew4.getXFlux(D_C4_mat3(0, 0), C4_ele, J3_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C4_x4 As Double = cieNew4.getXFlux(D_C4_mat4(0, 0), C4_ele, J4_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C4_y1 As Double = cieNew4.getYFlux(D_C4_mat1(1, 1), C4_ele, J1_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C4_y2 As Double = cieNew4.getYFlux(D_C4_mat2(1, 1), C4_ele, J2_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C4_y3 As Double = cieNew4.getYFlux(D_C4_mat3(1, 1), C4_ele, J3_C4_inv, cieNew4.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C4_y4 As Double = cieNew4.getYFlux(D_C4_mat4(1, 1), C4_ele, J4_C4_inv, cieNew4.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C4X As Double() = getve(flux_C4_x1, flux_C4_x2, flux_C4_x3, flux_C4_x4)
+            Dim vec_flux_C4Y As Double() = getve(flux_C4_y1, flux_C4_y2, flux_C4_y3, flux_C4_y4)
+            AssembleVg(vec_flux_C4X, J4X, Elements, i)
+            AssembleVg(vec_flux_C4Y, J4Y, Elements, i)
+            AssembleKg(cieNew4.getbe_MI, bg4, Elements, i)
+            AssembleKg(cieNew4.getAe_MI, Ag4, Elements, i)
+            'flux Ca 2+ and matrix assembling, xuande 2021.09.03
+            Dim J1_C5_inv As Double(,) = cieNew5.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C5_inv As Double(,) = cieNew5.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C5_inv As Double(,) = cieNew5.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C5_inv As Double(,) = cieNew5.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C5_mat1 As Double(,) = cieNew5.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C5_mat2 As Double(,) = cieNew5.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C5_mat3 As Double(,) = cieNew5.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C5_mat4 As Double(,) = cieNew5.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C5_x1 As Double = cieNew5.getXFlux(D_C5_mat1(0, 0), C5_ele, J1_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C5_x2 As Double = cieNew5.getXFlux(D_C5_mat2(0, 0), C5_ele, J2_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C5_x3 As Double = cieNew5.getXFlux(D_C5_mat3(0, 0), C5_ele, J3_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C5_x4 As Double = cieNew5.getXFlux(D_C5_mat4(0, 0), C5_ele, J4_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C5_y1 As Double = cieNew5.getYFlux(D_C5_mat1(1, 1), C5_ele, J1_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C5_y2 As Double = cieNew5.getYFlux(D_C5_mat2(1, 1), C5_ele, J2_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C5_y3 As Double = cieNew5.getYFlux(D_C5_mat3(1, 1), C5_ele, J3_C5_inv, cieNew5.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C5_y4 As Double = cieNew5.getYFlux(D_C5_mat4(1, 1), C5_ele, J4_C5_inv, cieNew5.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C5X As Double() = getve(flux_C5_x1, flux_C5_x2, flux_C5_x3, flux_C5_x4)
+            Dim vec_flux_C5Y As Double() = getve(flux_C5_y1, flux_C5_y2, flux_C5_y3, flux_C5_y4)
+            AssembleVg(vec_flux_C5X, J5X, Elements, i)
+            AssembleVg(vec_flux_C5Y, J5Y, Elements, i)
+            AssembleKg(cieNew5.getbe_MI, bg5, Elements, i)
+            AssembleKg(cieNew5.getAe_MI, Ag5, Elements, i)
+            'flux SO4 2- and matrix assembling, xuande 2021.09.03
+            Dim J1_C6_inv As Double(,) = cieNew6.GetInversedJac(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J2_C6_inv As Double(,) = cieNew6.GetInversedJac(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim J3_C6_inv As Double(,) = cieNew6.GetInversedJac(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim J4_C6_inv As Double(,) = cieNew6.GetInversedJac(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C6_mat1 As Double(,) = cieNew6.getDmat(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C6_mat2 As Double(,) = cieNew6.getDmat(1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
+            Dim D_C6_mat3 As Double(,) = cieNew6.getDmat(1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim D_C6_mat4 As Double(,) = cieNew6.getDmat(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3))
+            Dim flux_C6_x1 As Double = cieNew6.getXFlux(D_C6_mat1(0, 0), C6_ele, J1_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C6_x2 As Double = cieNew6.getXFlux(D_C6_mat2(0, 0), C6_ele, J2_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C6_x3 As Double = cieNew6.getXFlux(D_C6_mat3(0, 0), C6_ele, J3_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C6_x4 As Double = cieNew6.getXFlux(D_C6_mat4(0, 0), C6_ele, J4_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C6_y1 As Double = cieNew6.getYFlux(D_C6_mat1(1, 1), C6_ele, J1_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C6_y2 As Double = cieNew6.getYFlux(D_C6_mat2(1, 1), C6_ele, J2_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), -1 / Math.Sqrt(3)))
+            Dim flux_C6_y3 As Double = cieNew6.getYFlux(D_C6_mat3(1, 1), C6_ele, J3_C6_inv, cieNew6.getB(1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim flux_C6_y4 As Double = cieNew6.getYFlux(D_C6_mat4(1, 1), C6_ele, J4_C6_inv, cieNew6.getB(-1 / Math.Sqrt(3), 1 / Math.Sqrt(3)))
+            Dim vec_flux_C6X As Double() = getve(flux_C6_x1, flux_C6_x2, flux_C6_x3, flux_C6_x4)
+            Dim vec_flux_C6Y As Double() = getve(flux_C6_y1, flux_C6_y2, flux_C6_y3, flux_C6_y4)
+            AssembleVg(vec_flux_C6X, J6X, Elements, i)
+            AssembleVg(vec_flux_C6Y, J6Y, Elements, i)
+            AssembleKg(cieNew6.getbe_MI, bg6, Elements, i)
+            AssembleKg(cieNew6.getAe_MI, Ag6, Elements, i)
+        Next
         ' Now, we have assembled C1-C6, Ag1-Ag6 and bg1-bg6, get LHS1-LHS and RHS1-RHS6 and resolve the linear matrix system.
         getLHS_MI(LHS1, NNodes, Ag1, bg1, dt)
         getLHS_MI(LHS2, NNodes, Ag2, bg2, dt)

@@ -55,7 +55,7 @@ Public Class ColorMap
         ReDim Colors(nSegs)
         Dim c() As Color
         For i = 0 To Indices.Length - 2
-            c = getSteppedColors(mainColors(i + 1), mainColors(i), Indices(i + 1) - Indices(i))
+            c = GetSteppedColors(mainColors(i + 1), mainColors(i), Indices(i + 1) - Indices(i))
             For j = 0 To c.Length - 1
                 Colors(Indices(i) + j) = c(j)
             Next
@@ -63,7 +63,7 @@ Public Class ColorMap
 
     End Sub
 
-    Private Function getSteppedColors(cTop As Color, cBottom As Color, nPoints As Integer) As Color()
+    Private Function GetSteppedColors(cTop As Color, cBottom As Color, nPoints As Integer) As Color()
 
         Dim btm As Color = cBottom
         Dim top As Color = cTop

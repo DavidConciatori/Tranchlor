@@ -215,7 +215,7 @@
     <Compile Include="CETrans.vb" />
     <Compile Include="CIETrans_MI.vb" />
     <Compile Include="Compute2D.vb" />
-    <Compile Include="Compute2D_trial.vb" />
+    <Compile Include="Compute2Dtrial.vb" />
     <Compile Include="DBConnexion.vb" />
     <Compile Include="Exposition.vb" />
     <Compile Include="frmInput2D.vb">

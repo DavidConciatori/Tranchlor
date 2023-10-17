@@ -1,4 +1,10 @@
-﻿Public Class CETrans
+﻿'Option Explicit On
+'Imports System
+'Imports System.ComponentModel
+'Imports System.IO
+'Imports System.Linq
+
+Public Class CETrans
     'Implementation of the 4*1 Elemental vector for concentration
     Private c1, c2, c3, c4 As Double
     ''' <summary>
@@ -22,5 +28,14 @@
         Ce(2) = c3
         Ce(3) = c4
         Return Ce
+    End Function
+
+    Public Overrides Function Equals(obj As Object) As Boolean
+        Dim trans = TryCast(obj, CETrans)
+        Return trans IsNot Nothing AndAlso
+               c1 = trans.c1 AndAlso
+               c2 = trans.c2 AndAlso
+               c3 = trans.c3 AndAlso
+               c4 = trans.c4
     End Function
 End Class

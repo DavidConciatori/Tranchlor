@@ -1,5 +1,11 @@
-Imports System.Resources
+'Option Explicit On
+'Imports System
+'Imports System.ComponentModel
+'Imports System.IO
+'Imports System.Linq
+
 Imports System.Reflection
+Imports System.Resources
 Imports System.Runtime.InteropServices
 
 ' General Information about an assembly is controlled through the following 

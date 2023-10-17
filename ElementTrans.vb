@@ -63,17 +63,17 @@ Public Class ElementTrans
         SO4(time) = SO4val
     End Sub
     'flux , xuande 2020.09.28
-    Public Sub SetThermoFlux(ByRef time As Integer, ByRef flux_x As Double, ByRef flux_y As Double)
-        Jx_thm(time) = flux_x
-        Jy_thm(time) = flux_y
+    Public Sub SetThermoFlux(ByRef time As Integer, ByRef fluxX As Double, ByRef fluxY As Double)
+        Jx_thm(time) = fluxX
+        Jy_thm(time) = fluxY
     End Sub
-    Public Sub SetCapillarityFlux(ByRef time As Integer, ByRef flux_x As Double, ByRef flux_y As Double)
-        Jx_cap(time) = flux_x
-        Jy_cap(time) = flux_y
+    Public Sub SetCapillarityFlux(ByRef time As Integer, ByRef fluxX As Double, ByRef fluxY As Double)
+        Jx_cap(time) = fluxX
+        Jy_cap(time) = fluxY
     End Sub
-    Public Sub SetDiffusionFlux(ByRef time As Integer, ByRef flux_x As Double, ByRef flux_y As Double)
-        Jx_dif(time) = flux_x
-        Jy_dif(time) = flux_y
+    Public Sub SetDiffusionFlux(ByRef time As Integer, ByRef fluxX As Double, ByRef fluxY As Double)
+        Jx_dif(time) = fluxX
+        Jy_dif(time) = fluxY
     End Sub
     Public Sub SetIonicFlux(ByRef time As Integer, ByRef flux_x As Double, ByRef flux_y As Double)
         Jx_ion(time) = flux_x

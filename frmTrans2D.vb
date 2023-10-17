@@ -133,7 +133,7 @@ Public Class FrmTrans2D
         End If
 
         'Dim C2D As New Compute2D
-        Dim C2D As New Compute2D_trial 'Xuande, activate hygro-thermo coupling multi-ionic model
+        Dim C2D As New Compute2Dtrial 'Xuande, activate hygro-thermo coupling multi-ionic model
         'perform analysis using the finite elemeent method
         Dim ind As Integer = C2D.Read_InputFile()
         For i As Integer = 1 To Expo.Length - 1

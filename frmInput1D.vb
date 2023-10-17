@@ -30,7 +30,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
     'Do not modify it using the code editor.
     Public WithEvents Command2 As System.Windows.Forms.Button
     Public WithEvents SSTab1 As System.Windows.Forms.TabControl
-    Public WithEvents _SSTab1_TabPage0 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage0 As System.Windows.Forms.TabPage
     Public WithEvents Frame1 As System.Windows.Forms.GroupBox
     Public WithEvents Combo5 As System.Windows.Forms.ComboBox
     Public WithEvents Text45 As System.Windows.Forms.TextBox
@@ -50,13 +50,13 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
     Public WithEvents Text3 As System.Windows.Forms.TextBox
     Public WithEvents Label6 As System.Windows.Forms.Label
     Public WithEvents Label5 As System.Windows.Forms.Label
-    Public WithEvents _SSTab1_TabPage2 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage2 As System.Windows.Forms.TabPage
     Public WithEvents Frame7 As System.Windows.Forms.GroupBox
     Public WithEvents Label28 As System.Windows.Forms.Label
     Public WithEvents Frame8 As System.Windows.Forms.GroupBox
     Public WithEvents Text26 As System.Windows.Forms.TextBox
     Public WithEvents Label46 As System.Windows.Forms.Label
-    Public WithEvents _SSTab1_TabPage1 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage1 As System.Windows.Forms.TabPage
     Public WithEvents Frame3 As System.Windows.Forms.GroupBox
     Public WithEvents Combo1 As System.Windows.Forms.ComboBox
     Public WithEvents Text9 As System.Windows.Forms.TextBox
@@ -125,7 +125,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
     Public WithEvents Label25 As System.Windows.Forms.Label
     Public WithEvents Label24 As System.Windows.Forms.Label
     Public WithEvents Label23 As System.Windows.Forms.Label
-    Public WithEvents _SSTab1_TabPage3 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage3 As System.Windows.Forms.TabPage
     Public WithEvents Frame12 As System.Windows.Forms.GroupBox
     Public WithEvents Picture1 As System.Windows.Forms.PictureBox
     Public WithEvents Text32 As System.Windows.Forms.TextBox
@@ -139,7 +139,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
     Public WithEvents Frame16 As System.Windows.Forms.GroupBox
     Public WithEvents Text39 As System.Windows.Forms.TextBox
     Public WithEvents Label66 As System.Windows.Forms.Label
-    Public WithEvents _SSTab1_TabPage4 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage4 As System.Windows.Forms.TabPage
     Public WithEvents Frame17 As System.Windows.Forms.GroupBox
     Public WithEvents Text40 As System.Windows.Forms.TextBox
     Public WithEvents Label67 As System.Windows.Forms.Label
@@ -152,7 +152,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
     Public WithEvents Text48 As System.Windows.Forms.TextBox
     Public WithEvents Label82 As System.Windows.Forms.Label
     Public WithEvents Label81 As System.Windows.Forms.Label
-    Public WithEvents _SSTab1_TabPage5 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1_TabPage5 As System.Windows.Forms.TabPage
     Public WithEvents Frame22 As System.Windows.Forms.GroupBox
     Public WithEvents Label73 As System.Windows.Forms.Label
     Public WithEvents ToolTip1 As System.Windows.Forms.ToolTip
@@ -325,7 +325,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmInput1D))
         Me.Command2 = New System.Windows.Forms.Button()
         Me.SSTab1 = New System.Windows.Forms.TabControl()
-        Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage0 = New System.Windows.Forms.TabPage()
         Me.Frame1 = New System.Windows.Forms.GroupBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label100 = New System.Windows.Forms.Label()
@@ -364,7 +364,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Text3 = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage1 = New System.Windows.Forms.TabPage()
         Me.Frame3 = New System.Windows.Forms.GroupBox()
         Me.Combo1 = New System.Windows.Forms.ComboBox()
         Me.Text9 = New System.Windows.Forms.TextBox()
@@ -436,7 +436,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Label25 = New System.Windows.Forms.Label()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
-        Me._SSTab1_TabPage2 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage2 = New System.Windows.Forms.TabPage()
         Me.Frame7 = New System.Windows.Forms.GroupBox()
         Me.Label99 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -445,7 +445,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Frame8 = New System.Windows.Forms.GroupBox()
         Me.Text26 = New System.Windows.Forms.TextBox()
         Me.Label46 = New System.Windows.Forms.Label()
-        Me._SSTab1_TabPage3 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage3 = New System.Windows.Forms.TabPage()
         Me.Frame12 = New System.Windows.Forms.GroupBox()
         Me.Label106 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -495,7 +495,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.TextBox25 = New System.Windows.Forms.TextBox()
         Me.Label58 = New System.Windows.Forms.Label()
         Me.Label57 = New System.Windows.Forms.Label()
-        Me._SSTab1_TabPage4 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage4 = New System.Windows.Forms.TabPage()
         Me.Frame17 = New System.Windows.Forms.GroupBox()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
@@ -535,7 +535,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Button6 = New System.Windows.Forms.Button()
-        Me._SSTab1_TabPage5 = New System.Windows.Forms.TabPage()
+        Me.SSTab1_TabPage5 = New System.Windows.Forms.TabPage()
         Me.GroupBox8 = New System.Windows.Forms.GroupBox()
         Me.Label141 = New System.Windows.Forms.Label()
         Me.Label142 = New System.Windows.Forms.Label()
@@ -616,19 +616,19 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Button4 = New System.Windows.Forms.Button()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.SSTab1.SuspendLayout()
-        Me._SSTab1_TabPage0.SuspendLayout()
+        Me.SSTab1_TabPage0.SuspendLayout()
         Me.Frame1.SuspendLayout()
         Me.Frame2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        Me._SSTab1_TabPage1.SuspendLayout()
+        Me.SSTab1_TabPage1.SuspendLayout()
         Me.Frame3.SuspendLayout()
         Me.Frame4.SuspendLayout()
         Me.Frame5.SuspendLayout()
         Me.Frame6.SuspendLayout()
-        Me._SSTab1_TabPage2.SuspendLayout()
+        Me.SSTab1_TabPage2.SuspendLayout()
         Me.Frame7.SuspendLayout()
         Me.Frame8.SuspendLayout()
-        Me._SSTab1_TabPage3.SuspendLayout()
+        Me.SSTab1_TabPage3.SuspendLayout()
         Me.Frame12.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Picture1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -638,7 +638,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.TabPage2.SuspendLayout()
         Me.GroupBox7.SuspendLayout()
         Me.GroupBox6.SuspendLayout()
-        Me._SSTab1_TabPage4.SuspendLayout()
+        Me.SSTab1_TabPage4.SuspendLayout()
         Me.Frame17.SuspendLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -646,7 +646,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Frame21.SuspendLayout()
         Me.TabPage1.SuspendLayout()
-        Me._SSTab1_TabPage5.SuspendLayout()
+        Me.SSTab1_TabPage5.SuspendLayout()
         Me.GroupBox8.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -671,14 +671,14 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         'SSTab1
         '
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage0)
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage1)
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage2)
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage3)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage0)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage1)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage2)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage3)
         Me.SSTab1.Controls.Add(Me.TabPage2)
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage4)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage4)
         Me.SSTab1.Controls.Add(Me.TabPage1)
-        Me.SSTab1.Controls.Add(Me._SSTab1_TabPage5)
+        Me.SSTab1.Controls.Add(Me.SSTab1_TabPage5)
         Me.SSTab1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SSTab1.ItemSize = New System.Drawing.Size(42, 18)
         Me.SSTab1.Location = New System.Drawing.Point(8, 8)
@@ -689,13 +689,13 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage0
         '
-        Me._SSTab1_TabPage0.Controls.Add(Me.Frame1)
-        Me._SSTab1_TabPage0.Controls.Add(Me.Frame2)
-        Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage0.TabIndex = 0
-        Me._SSTab1_TabPage0.Text = "Matériaux"
+        Me.SSTab1_TabPage0.Controls.Add(Me.Frame1)
+        Me.SSTab1_TabPage0.Controls.Add(Me.Frame2)
+        Me.SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
+        Me.SSTab1_TabPage0.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage0.TabIndex = 0
+        Me.SSTab1_TabPage0.Text = "Matériaux"
         '
         'Frame1
         '
@@ -1248,16 +1248,16 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage1
         '
-        Me._SSTab1_TabPage1.Controls.Add(Me.Frame3)
-        Me._SSTab1_TabPage1.Controls.Add(Me.Frame4)
-        Me._SSTab1_TabPage1.Controls.Add(Me.Frame5)
-        Me._SSTab1_TabPage1.Controls.Add(Me.Frame6)
-        Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage1.TabIndex = 1
-        Me._SSTab1_TabPage1.Text = "Paramètres du programme"
-        Me._SSTab1_TabPage1.Visible = False
+        Me.SSTab1_TabPage1.Controls.Add(Me.Frame3)
+        Me.SSTab1_TabPage1.Controls.Add(Me.Frame4)
+        Me.SSTab1_TabPage1.Controls.Add(Me.Frame5)
+        Me.SSTab1_TabPage1.Controls.Add(Me.Frame6)
+        Me.SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
+        Me.SSTab1_TabPage1.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage1.TabIndex = 1
+        Me.SSTab1_TabPage1.Text = "Paramètres du programme"
+        Me.SSTab1_TabPage1.Visible = False
         '
         'Frame3
         '
@@ -2272,14 +2272,14 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage2
         '
-        Me._SSTab1_TabPage2.Controls.Add(Me.Frame7)
-        Me._SSTab1_TabPage2.Controls.Add(Me.Frame8)
-        Me._SSTab1_TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage2.Name = "_SSTab1_TabPage2"
-        Me._SSTab1_TabPage2.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage2.TabIndex = 2
-        Me._SSTab1_TabPage2.Text = "Transport thermique"
-        Me._SSTab1_TabPage2.Visible = False
+        Me.SSTab1_TabPage2.Controls.Add(Me.Frame7)
+        Me.SSTab1_TabPage2.Controls.Add(Me.Frame8)
+        Me.SSTab1_TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage2.Name = "_SSTab1_TabPage2"
+        Me.SSTab1_TabPage2.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage2.TabIndex = 2
+        Me.SSTab1_TabPage2.Text = "Transport thermique"
+        Me.SSTab1_TabPage2.Visible = False
         '
         'Frame7
         '
@@ -2394,15 +2394,15 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage3
         '
-        Me._SSTab1_TabPage3.Controls.Add(Me.Frame12)
-        Me._SSTab1_TabPage3.Controls.Add(Me.Frame13)
-        Me._SSTab1_TabPage3.Controls.Add(Me.Frame16)
-        Me._SSTab1_TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage3.Name = "_SSTab1_TabPage3"
-        Me._SSTab1_TabPage3.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage3.TabIndex = 3
-        Me._SSTab1_TabPage3.Text = "Transport hydrique"
-        Me._SSTab1_TabPage3.Visible = False
+        Me.SSTab1_TabPage3.Controls.Add(Me.Frame12)
+        Me.SSTab1_TabPage3.Controls.Add(Me.Frame13)
+        Me.SSTab1_TabPage3.Controls.Add(Me.Frame16)
+        Me.SSTab1_TabPage3.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage3.Name = "_SSTab1_TabPage3"
+        Me.SSTab1_TabPage3.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage3.TabIndex = 3
+        Me.SSTab1_TabPage3.Text = "Transport hydrique"
+        Me.SSTab1_TabPage3.Visible = False
         '
         'Frame12
         '
@@ -2958,15 +2958,15 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage4
         '
-        Me._SSTab1_TabPage4.Controls.Add(Me.Frame17)
-        Me._SSTab1_TabPage4.Controls.Add(Me.Frame20)
-        Me._SSTab1_TabPage4.Controls.Add(Me.Frame21)
-        Me._SSTab1_TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage4.Name = "_SSTab1_TabPage4"
-        Me._SSTab1_TabPage4.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage4.TabIndex = 4
-        Me._SSTab1_TabPage4.Text = "Tranport ionique des chlorures"
-        Me._SSTab1_TabPage4.Visible = False
+        Me.SSTab1_TabPage4.Controls.Add(Me.Frame17)
+        Me.SSTab1_TabPage4.Controls.Add(Me.Frame20)
+        Me.SSTab1_TabPage4.Controls.Add(Me.Frame21)
+        Me.SSTab1_TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage4.Name = "_SSTab1_TabPage4"
+        Me.SSTab1_TabPage4.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage4.TabIndex = 4
+        Me.SSTab1_TabPage4.Text = "Tranport ionique des chlorures"
+        Me.SSTab1_TabPage4.Visible = False
         '
         'Frame17
         '
@@ -3466,16 +3466,16 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         '
         '_SSTab1_TabPage5
         '
-        Me._SSTab1_TabPage5.Controls.Add(Me.GroupBox8)
-        Me._SSTab1_TabPage5.Controls.Add(Me.GroupBox5)
-        Me._SSTab1_TabPage5.Controls.Add(Me.GroupBox4)
-        Me._SSTab1_TabPage5.Controls.Add(Me.Frame22)
-        Me._SSTab1_TabPage5.Location = New System.Drawing.Point(4, 22)
-        Me._SSTab1_TabPage5.Name = "_SSTab1_TabPage5"
-        Me._SSTab1_TabPage5.Size = New System.Drawing.Size(960, 414)
-        Me._SSTab1_TabPage5.TabIndex = 5
-        Me._SSTab1_TabPage5.Text = "Analyse probabiliste"
-        Me._SSTab1_TabPage5.Visible = False
+        Me.SSTab1_TabPage5.Controls.Add(Me.GroupBox8)
+        Me.SSTab1_TabPage5.Controls.Add(Me.GroupBox5)
+        Me.SSTab1_TabPage5.Controls.Add(Me.GroupBox4)
+        Me.SSTab1_TabPage5.Controls.Add(Me.Frame22)
+        Me.SSTab1_TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.SSTab1_TabPage5.Name = "_SSTab1_TabPage5"
+        Me.SSTab1_TabPage5.Size = New System.Drawing.Size(960, 414)
+        Me.SSTab1_TabPage5.TabIndex = 5
+        Me.SSTab1_TabPage5.Text = "Analyse probabiliste"
+        Me.SSTab1_TabPage5.Visible = False
         '
         'GroupBox8
         '
@@ -4390,13 +4390,13 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Name = "frmOption1"
         Me.Text = "Input"
         Me.SSTab1.ResumeLayout(False)
-        Me._SSTab1_TabPage0.ResumeLayout(False)
+        Me.SSTab1_TabPage0.ResumeLayout(False)
         Me.Frame1.ResumeLayout(False)
         Me.Frame1.PerformLayout()
         Me.Frame2.ResumeLayout(False)
         Me.Frame2.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        Me._SSTab1_TabPage1.ResumeLayout(False)
+        Me.SSTab1_TabPage1.ResumeLayout(False)
         Me.Frame3.ResumeLayout(False)
         Me.Frame3.PerformLayout()
         Me.Frame4.ResumeLayout(False)
@@ -4405,12 +4405,12 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Frame5.PerformLayout()
         Me.Frame6.ResumeLayout(False)
         Me.Frame6.PerformLayout()
-        Me._SSTab1_TabPage2.ResumeLayout(False)
+        Me.SSTab1_TabPage2.ResumeLayout(False)
         Me.Frame7.ResumeLayout(False)
         Me.Frame7.PerformLayout()
         Me.Frame8.ResumeLayout(False)
         Me.Frame8.PerformLayout()
-        Me._SSTab1_TabPage3.ResumeLayout(False)
+        Me.SSTab1_TabPage3.ResumeLayout(False)
         Me.Frame12.ResumeLayout(False)
         Me.Frame12.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -4425,7 +4425,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.GroupBox7.PerformLayout()
         Me.GroupBox6.ResumeLayout(False)
         Me.GroupBox6.PerformLayout()
-        Me._SSTab1_TabPage4.ResumeLayout(False)
+        Me.SSTab1_TabPage4.ResumeLayout(False)
         Me.Frame17.ResumeLayout(False)
         Me.Frame17.PerformLayout()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
@@ -4436,7 +4436,7 @@ Public Class frmInput1D : Inherits System.Windows.Forms.Form
         Me.Frame21.ResumeLayout(False)
         Me.Frame21.PerformLayout()
         Me.TabPage1.ResumeLayout(False)
-        Me._SSTab1_TabPage5.ResumeLayout(False)
+        Me.SSTab1_TabPage5.ResumeLayout(False)
         Me.GroupBox8.ResumeLayout(False)
         Me.GroupBox8.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)

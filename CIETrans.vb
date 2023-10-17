@@ -28,7 +28,7 @@
     End Sub
 
     ''' Returns the integrated [be] matrix by Gauss sommation method
-    Public Function getbe() As Double(,)
+    Public Function Getbe() As Double(,)
         Dim be(3, 3) As Double 'initialize a 4x4 vector
         'Compute be now
         Dim DetJ1 As Double = getDetJ(-1 / Math.Sqrt(3), -1 / Math.Sqrt(3))
