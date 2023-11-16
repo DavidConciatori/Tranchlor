@@ -1,6 +1,9 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Linq
 Public Class Compute2Dtrial
+    Dim ServerName As String = "(LocalDB)\MSSQLLocalDB"
+    Dim DatabaseName As String = "|DataDirectory|\TransChlorMat.mdf"
+
     Dim ind As Integer
     Dim directory As String
     Dim wsat As Double
@@ -111,7 +114,7 @@ Public Class Compute2Dtrial
 
     Public Sub DBInput(ByRef MatName As String)
 
-        Dim con As New SqlConnection("Data Source=GCI-DACON-01.FSG.ULAVAL.CA;Initial Catalog=\\GCI-DACON-01\TRANSCHLOR\DATABASE\TRANSCHLORMAT.MDF;Integrated Security=True")
+        Dim con As New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\TransChlorMat.mdf;Integrated Security=True")
 
         Try
             con.Open()

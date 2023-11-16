@@ -22,7 +22,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
-    <OptionCompare>Binary</OptionCompare>
+    <OptionCompare>Text</OptionCompare>
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>Off</OptionStrict>
     <RootNamespace>TransChlor</RootNamespace>
@@ -176,6 +176,7 @@
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data">
@@ -226,11 +227,6 @@
     </Compile>
     <Compile Include="FrmMeteoDatabase.vb">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MaterialsData.Designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MaterialsData.xsd</DependentUpon>
     </Compile>
     <Compile Include="Old\btGauss.vb" />
     <Compile Include="Old\CGraph.vb">
@@ -385,18 +381,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TransChlorMat.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TransChlorMat_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>TransChlorMat.mdf</DependentUpon>
+    </Content>
     <None Include="app.config" />
-    <None Include="MaterialsData.xsc">
-      <DependentUpon>MaterialsData.xsd</DependentUpon>
-    </None>
-    <None Include="MaterialsData.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>MaterialsData.Designer.vb</LastGenOutput>
-    </None>
-    <None Include="MaterialsData.xss">
-      <DependentUpon>MaterialsData.xsd</DependentUpon>
-    </None>
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

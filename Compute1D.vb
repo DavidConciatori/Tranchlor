@@ -470,14 +470,14 @@ Public Class Compute1D
             Try
 
                 Dim DBCon As New DBconnexion
-                Dim Expo As New MaterialsData
+                'Dim Expo As New MaterialsData
 
                 DBCon.DBRequest("SELECT * FROM [" + INFile + "]")
-                DBCon.MatFill(Expo, INFile)
+                'DBCon.MatFill(Expo, INFile)
 
-                Dim ExpoTable()() As Object = Expo.Tables(INFile).Rows.Cast(Of DataRow).Select(Function(dr) dr.ItemArray).ToArray
+                'Dim ExpoTable()() As Object = Expo.Tables(INFile).Rows.Cast(Of DataRow).Select(Function(dr) dr.ItemArray).ToArray
 
-                NbreEn = ExpoTable.Count()
+                'NbreEn = ExpoTable.Count()
                 Fit = 3600
 
                 ReDim Humidite(NbreEn)
@@ -485,9 +485,9 @@ Public Class Compute1D
                 ReDim Temperature(NbreEn)
 
                 For j As Integer = 0 To NbreEn - 1
-                    Humidite(j) = CSng(ExpoTable(j)(1))
-                    Sel(j) = CSng(ExpoTable(j)(2))
-                    Temperature(j) = CDec(ExpoTable(j)(3))
+                    'Humidite(j) = CSng(ExpoTable(j)(1))
+                    'Sel(j) = CSng(ExpoTable(j)(2))
+                    'Temperature(j) = CDec(ExpoTable(j)(3))
                     If Temperature(j) > TempMax Then TempMax = Temperature(j)
                     If Temperature(j) < TempMin Then TempMin = Temperature(j)
                     Sel(j) *= CSng(35.453 / 58.443) 'calcul de cT à partir de co à multiplier par w(0) ou (dofs)

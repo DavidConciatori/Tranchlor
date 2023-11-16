@@ -1,7 +1,7 @@
 ﻿Public Class FrmMeteoDatabase
 
     ReadOnly DBCon As New DBconnexion
-    ReadOnly Expo As New MaterialsData
+    'ReadOnly Expo As New MaterialsData
     'Private bindingSource As New BindingSource()
 
     Dim ExpoName As String
@@ -15,9 +15,9 @@
         ' Add any initialization after the InitializeComponent() call.
 
         DBCon.DBRequest("SELECT * FROM ExpositionList")
-        DBCon.MatFill(Expo, "ExpositionList")
+        'DBCon.MatFill(Expo, "ExpositionList")
 
-        ComboBoxMat.DataSource = Expo.Tables("ExpositionList")
+        'ComboBoxMat.DataSource = Expo.Tables("ExpositionList")
         ComboBoxMat.DisplayMember = "Name"
         ComboBoxMat.ValueMember = "Id"
 
@@ -39,7 +39,7 @@
             'DataGridView.Columns("Id").Visible = False
             'DataGridView.AutoResizeColumns()
 
-            DataGridView2.DataSource = Expo.Tables("ExpositionList")
+            'DataGridView2.DataSource = Expo.Tables("ExpositionList")
             DataGridView2.Columns("Id").Visible = False
             DataGridView2.AutoResizeColumns()
 
@@ -63,10 +63,10 @@
             Case MsgBoxResult.Yes
 
                 DBCon.DBRequest("SELECT * FROM [" + ExpoName + "]")
-                DBCon.DBUpdate(Expo, ExpoName)
+                'DBCon.DBUpdate(Expo, ExpoName)
 
                 DBCon.DBRequest("SELECT * FROM ExpositionList")
-                DBCon.DBUpdate(Expo, "MaterialsList")
+                'DBCon.DBUpdate(Expo, "MaterialsList")
 
             Case MsgBoxResult.No
 
@@ -97,7 +97,7 @@ B:
                 End Try
 
                 DBCon.DBRequest("SELECT * FROM ExpositionList")
-                DBCon.MatFill(Expo, "ExpositionList")
+                'DBCon.MatFill(Expo, "ExpositionList")
 
                 Me.Refresh()
 

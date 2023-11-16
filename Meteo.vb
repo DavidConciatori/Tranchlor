@@ -879,56 +879,56 @@ Module Meteo
         cmd = "CREATE TABLE [dbo].[" + PrefixName + Name + "] ([Id] INT IDENTITY (1, 1) NOT NULL, [HR] FLOAT (53) NULL, [NaCl] FLOAT (53) NOT NULL, [T] FLOAT (53) NOT NULL, [Year] FLOAT (53), PRIMARY KEY CLUSTERED ([Id] ASC))"
         DBCon.DBRequest(cmd)
 
-        Dim Expo As New MaterialsData
-        Expo.Tables.Add(PrefixName + Name)
+        'Dim Expo As New MaterialsData
+        'Expo.Tables.Add(PrefixName + Name)
         DBCon.DBRequest("SELECT * FROM " + PrefixName + Name)
-        DBCon.MatFill(Expo, PrefixName + Name)
+        'DBCon.MatFill(Expo, PrefixName + Name)
 
         Dim HR, NaCl, T, Year As Double
 
         For i As Integer = 0 To iAnzahl - 1
 
-            Dim newRow As DataRow = Expo.Tables(PrefixName + Name).NewRow()
+            'Dim newRow As DataRow = Expo.Tables(PrefixName + Name).NewRow()
 
             If ExpositionCond = "Eclaboussure" Then
-                newRow("HR") = arrMatrice(i).HR_eclaboussures
+                'newRow("HR") = arrMatrice(i).HR_eclaboussures
             ElseIf ExpositionCond = "Brouillard" Then
-                newRow("HR") = arrMatrice(i).HR_brouillard
+                'newRow("HR") = arrMatrice(i).HR_brouillard
             ElseIf ExpositionCond = "Direct" Then
-                newRow("HR") = arrMatrice(i).HR_direct
+                'newRow("HR") = arrMatrice(i).HR_direct
             ElseIf ExpositionCond = "Bitume" Then
-                newRow("HR") = arrMatrice(i).HR_bitume
+                'newRow("HR") = arrMatrice(i).HR_bitume
             ElseIf ExpositionCond = "AbriPrecipitation" Then
-                newRow("HR") = arrMatrice(i).HR_ext
+                'newRow("HR") = arrMatrice(i).HR_ext
             Else
-                newRow("HR") = arrMatrice(i).HR_caisson
+                'newRow("HR") = arrMatrice(i).HR_caisson
             End If
 
             If Epandage = "Manuel" Then
-                newRow("NaCl") = arrMatrice(i).salage1
+                'newRow("NaCl") = arrMatrice(i).salage1
             Else
-                newRow("NaCl") = arrMatrice(i).salage2
+                'newRow("NaCl") = arrMatrice(i).salage2
             End If
 
             If Zone = "Ensoleillé" Then
-                newRow("T") = arrMatrice(i).Ts
+                'newRow("T") = arrMatrice(i).Ts
             ElseIf Zone = "Ombré" Or ExpositionCond = "Bitume" Then
-                newRow("T") = arrMatrice(i).T
+                'newRow("T") = arrMatrice(i).T
             ElseIf ExpositionCond = "AbriPrecipitation" Then
-                newRow("T") = arrMatrice(i).Text
+                'newRow("T") = arrMatrice(i).Text
             ElseIf ExpositionCond = "Caisson" Or ExpositionCond = "CaissonAvecChlore" Then
-                newRow("T") = arrMatrice(i).Tcaisson
+                'newRow("T") = arrMatrice(i).Tcaisson
             Else
-                newRow("T") = arrMatrice(i).T
+                'newRow("T") = arrMatrice(i).T
             End If
 
-            newRow("Year") = arrMatrice(i).year2
+            'newRow("Year") = arrMatrice(i).year2
 
-            Expo.Tables(PrefixName + Name).Rows.Add(newRow)
+            'Expo.Tables(PrefixName + Name).Rows.Add(newRow)
 
         Next
 
-        DBCon.DBUpdate(Expo, PrefixName + Name)
+        'DBCon.DBUpdate(Expo, PrefixName + Name)
 
     End Sub
 

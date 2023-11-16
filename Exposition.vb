@@ -169,14 +169,14 @@ Public Class Exposition
             Try
 
                 Dim DBCon As New DBconnexion
-                Dim Expo As New MaterialsData
+                'Dim Expo As New MaterialsData
 
                 DBCon.DBRequest("SELECT TOP " + CStr(ind) + " * FROM [" + Name + "]")
-                DBCon.MatFill(Expo, Name)
+                'DBCon.MatFill(Expo, Name)
 
-                Dim ExpoTable()() As Object = Expo.Tables(Name).Rows.Cast(Of DataRow).Select(Function(dr) dr.ItemArray).ToArray
+                'Dim ExpoTable()() As Object = Expo.Tables(Name).Rows.Cast(Of DataRow).Select(Function(dr) dr.ItemArray).ToArray
 
-                NbreEn = ExpoTable.Length()
+                'NbreEn = ExpoTable.Length()
                 Dt = 3600
 
                 ReDim Humidite(ind - 1)
@@ -193,15 +193,15 @@ Public Class Exposition
                 For i As Integer = 0 To ind - 1
 
                     If i <= (NbreEn - 1) Then
-                        Humidite(j) = ExpoTable(i)(1)
-                        Sel(j) = ExpoTable(i)(2)
-                        Temperature(j) = ExpoTable(i)(3)
-                        Conc_Na(j) = ExpoTable(i)(4)
-                        Conc_Cl(j) = ExpoTable(i)(5)
-                        Conc_K(j) = ExpoTable(i)(6)
-                        Conc_OH(j) = ExpoTable(i)(7)
-                        Conc_Ca(j) = ExpoTable(i)(8)
-                        Conc_SO4(j) = ExpoTable(i)(9)
+                        'Humidite(j) = ExpoTable(i)(1)
+                        'Sel(j) = ExpoTable(i)(2)
+                        'Temperature(j) = ExpoTable(i)(3)
+                        'Conc_Na(j) = ExpoTable(i)(4)
+                        'Conc_Cl(j) = ExpoTable(i)(5)
+                        'Conc_K(j) = ExpoTable(i)(6)
+                        'Conc_OH(j) = ExpoTable(i)(7)
+                        'Conc_Ca(j) = ExpoTable(i)(8)
+                        'Conc_SO4(j) = ExpoTable(i)(9)
                         j += 1
                     ElseIf i <= (NbreEn * nbboucle - 1) Then
                         Humidite(i) = Humidite(j)

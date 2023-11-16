@@ -11,13 +11,12 @@ Public Class DBconnexion
     Public Sub New()
 
         Dim connected As Boolean = False
-        Dim ServerName As String = "132.203.36.238"
-        Dim DatabaseName As String = "\\GCI-DACON-01\TRANSCHLOR\DATABASE\TRANSCHLORMAT.MDF"
+
         While connected = False
 
             'Dim frm As New FrmLogin
             'frm.ShowDialog()
-            Connexion.ConnectionString = "Data Source = " + ServerName + "; Initial Catalog= " + DatabaseName + "; Integrated Security=True"
+            Connexion.ConnectionString = "Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\TransChlorMat.mdf;Integrated Security=True"
 
             If VerifyConnexion() = True Then
                 connected = True
@@ -51,20 +50,20 @@ Public Class DBconnexion
 
     End Sub
 
-    Public Sub MatFill(ByRef Mat As MaterialsData, ByRef Table As String)
+    'Public Sub MatFill(ByRef Mat As MaterialsData, ByRef Table As String)
 
-        Dim DAdapter As New SqlDataAdapter(Command)
-        DAdapter.Fill(Mat, Table)
+    '    Dim DAdapter As New SqlDataAdapter(Command)
+    '    DAdapter.Fill(Mat, Table)
 
-    End Sub
+    'End Sub
 
-    Public Sub DBUpdate(ByRef Mat As MaterialsData, ByRef Table As String)
+    'Public Sub DBUpdate(ByRef Mat As MaterialsData, ByRef Table As String)
 
-        Dim DAdapter As New SqlDataAdapter(Command)
-        Dim CmdBuilder As New SqlCommandBuilder(DAdapter)
-        DAdapter.Update(Mat, Table)
+    '    Dim DAdapter As New SqlDataAdapter(Command)
+    '    Dim CmdBuilder As New SqlCommandBuilder(DAdapter)
+    '    DAdapter.Update(Mat, Table)
 
-    End Sub
+    'End Sub
 
     Public Sub DBRead(ByRef Value As Double)
 

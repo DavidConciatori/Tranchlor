@@ -1,6 +1,9 @@
 Imports System.Data.SqlClient
 Imports System.Linq
 Public Class Compute2D
+    Dim ServerName As String = "(LocalDB)\MSSQLLocalDB"
+    Dim DatabaseName As String = "|DataDirectory|\TransChlorMat.mdf"
+
     Dim ind As Integer
     Dim directory As String
     Dim wsat As Double
@@ -17,25 +20,25 @@ Public Class Compute2D
     Public mPh As Double = 6.5
     Public RoW As Integer = 1000        'kg/m3
     Public R As Double = 8.3145        'J/mol.K
-    Public F As Double = 96484.6 'Farady constant
-    Public z_Na As Double = 1 'Na + valence number
-    Public z_Cl As Double = 1 'Cl - ...
-    Public z_K As Double = 1 'K + ...
-    Public z_OH As Double = 1 'OH - ...
-    Public z_Ca As Double = 1 'Ca 2+ ...
-    Public z_SO4 As Double = 1 'SO4 2- ...
+    Public F As Double = 96484.6    'Farady constant
+    Public z_Na As Double = 1   'Na + valence number
+    Public z_Cl As Double = 1   'Cl - ...
+    Public z_K As Double = 1    'K + ...
+    Public z_OH As Double = 1    'OH - ...
+    Public z_Ca As Double = 1   'Ca 2+ ...
+    Public z_SO4 As Double = 1   'SO4 2- ...
     'Parameters from input file (Eriture à l'ordre de lecture)
-    Dim alpha As Double  'hydration degree(-)
-    Dim w As Double 'indicator for isotherm curve
-    Dim H_int As Double  'initial relative humidity in the material
-    Dim T_int As Double  'initial temperature in the material
-    Dim Na_int As Double  'initial Sodium concentration in the material
-    Dim Cl_int As Double  'initial chloride concentration in the material
-    Dim K_int As Double  'initial Potassium concentration in the material
-    Dim OH_int As Double  'initial Hydroxide ion oncentration in the material
-    Dim Ca_int As Double  'initial Calcium concentration in the material
-    Dim SO4_int As Double  'initial Sulfate concentration in the material
-    Dim Tc As Double 'initial temperature in the material
+    Dim alpha As Double      'hydration degree(-)
+    Dim w As Double         'indicator for isotherm curve
+    Dim H_int As Double      'initial relative humidity in the material
+    Dim T_int As Double      'initial temperature in the material
+    Dim Na_int As Double     'initial Sodium concentration in the material
+    Dim Cl_int As Double     'initial chloride concentration in the material
+    Dim K_int As Double      'initial Potassium concentration in the material
+    Dim OH_int As Double     'initial Hydroxide ion oncentration in the material
+    Dim Ca_int As Double     'initial Calcium concentration in the material
+    Dim SO4_int As Double     'initial Sulfate concentration in the material
+    Dim Tc As Double    'initial temperature in the material
     Dim Model As Integer 'Computation model
     Dim tmax As Double 'end time (s) 72h
     Dim dt As Double 'time interval (s)
@@ -107,7 +110,7 @@ Public Class Compute2D
 
     Public Sub DBInput(ByRef MatName As String)
 
-        Dim con As New SqlConnection("Data Source=GCI-DACON-01.FSG.ULAVAL.CA;Initial Catalog=\\GCI-DACON-01\TRANSCHLOR\DATABASE\TRANSCHLORMAT.MDF;Integrated Security=True")
+        Dim con As New SqlConnection("Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\TransChlorMat.mdf;Integrated Security=True")
 
         Try
             con.Open()
